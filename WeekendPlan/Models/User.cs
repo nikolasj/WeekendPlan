@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -7,20 +9,27 @@ namespace WeekendPlan.Models
 {
     public class User
     {
-        public string Id { get; set; }
+        [Key]
+        [Column("user_id")]
+        public Int32 UserId { get; set; }
+        [Column("name")]
+        public String Name { get; set; }
+        [Column("picture")]
+        public String Picture { get; set; }
+        [Column("city_id")]
+        public Int32 City { get; set; }
+        [Column("driver_license")]
+        public Boolean DriverLicense { get; set; }
+        [Column("car")]
+        public string Car { get; set; }
+        [Column("asp_net_user_id")]
+        public String AspNetUserId { get; set; }
 
-        public string Name { get; set; }
-
-        public string FirstName { get; set; }
-
-        public string MiddleName { get; set; }
-
-        public string LastName { get; set; }
-
-        public string UserName { get; set; }
-
-        public string Gender { get; set; }
-
-        public string Email { get; set; }
+        public City City { get; set; }
+        public List<Category> PreferredCategories { get; set; }
+        public List<String> PreferredTags { get; set; }
+        //public List<Additional> Additionals { get; set; }
+        public List<SocialConnection> Connections { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

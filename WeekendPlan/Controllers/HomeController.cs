@@ -15,23 +15,6 @@ namespace WeekendPlan.Controllers
     {
         public ActionResult Index()
         {
-            var user = new User()
-            {
-                Id = "404",
-                Email = "chernikov@gmail.com",
-                UserName = "rollinx",
-                Name = "Andrey",
-                FirstName = "Andrey",
-                MiddleName = "Alexandrovich",
-                LastName = "Chernikov",
-                Gender = "M"
-            };
-            var jsonUser = JsonConvert.SerializeObject(user);
-
-            var jsonUserSource = "{\"Id\":\"405\",\"Name\":\"Andrey\",\"FirstName\":\"Andrey\",\"MiddleName\":\"Alexandrovich\",\"LastName\":\"Chernikov\",\"UserName\":\"rollinx\",\"Gender\":\"M\",\"Email\":\"chernikov@gmail.com\"}";
-
-            var user2 = JsonConvert.DeserializeObject<User>(jsonUserSource);
-
             return View();
         }
 
@@ -93,3 +76,21 @@ namespace WeekendPlan.Controllers
         }
     }
 }
+
+
+//var user = new User()
+//{
+//    Id = "404",
+//    Email = "chernikov@gmail.com",
+//    UserName = "rollinx",
+//    Name = "Andrey",
+//    FirstName = "Andrey",
+//    MiddleName = "Alexandrovich",
+//    LastName = "Chernikov",
+//    Gender = "M"
+//};
+//var jsonUser = JsonConvert.SerializeObject(user);
+
+//var jsonUserSource = "{\"Id\":\"405\",\"Name\":\"Andrey\",\"FirstName\":\"Andrey\",\"MiddleName\":\"Alexandrovich\",\"LastName\":\"Chernikov\",\"UserName\":\"rollinx\",\"Gender\":\"M\",\"Email\":\"chernikov@gmail.com\"}";
+
+//var user2 = JsonConvert.DeserializeObject<User>(jsonUserSource);
