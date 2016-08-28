@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<html>
+<head>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnGetWeather').click(function () {
+                var resultElement = $('#resultDiv');
+
+                var requestData =  $('#txtCity').val() + ',' + $('#txtCountry').val();
+                $.ajax({
+                    url: 'http://api.openweathermap.org/data/2.5/weather?q=' + $('#txtCity').val() + ',' + $('#txtCountry').val()+'&appid=0a28974e139fd12ec95731b95608263e',
+                    method: 'get',
+                    data: { q: requestData },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.message != null) {
+                            resultElement.html(data.message);
+                        }
+                        else {
+                            resultElement.html('Weather: ' + data.weather[0].main + '<br/>'
+                                + 'Description: ' + data.weather[0].description);
+                        }
+                    },
+                    error: function (err) {
+                        //alert(requestData);
+                        alert(err);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body style="font-family:Arial">
+    <br />
+    <br />
+    <table>
+        <tr>
+            <td>City</td>
+            <td><input type="text" id="txtCity" /></td>
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td><input type="text" id="txtCountry" /></td>
+        </tr>
+    </table>
+    <input type="button" id="btnGetWeather" value="Get Weather Data">
+    <br /><br />
+    <div id="resultDiv">
+    </div>
+</body>
+</html>
+
+
+@*'http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=0a28974e139fd12ec95731b95608263e'*@

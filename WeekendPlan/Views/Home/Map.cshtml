@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Map";
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    @*<script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?sid=ueOHl3sexkgIyh4Oq9kFBUiDNzFq7deW&amp;width=324&amp;height=316&amp;lang=ru_RU&amp;sourceType=constructor&amp;scroll=true"></script>*@
+    <script type="text/javascript">
+    var moscow_map,
+        piter_map;
+
+    ymaps.ready(function () {
+        moscow_map = new ymaps.Map("first_map", {
+            center: [55.76, 37.64],
+            zoom: 10
+        });
+        piter_map = new ymaps.Map(document.getElementsByTagName('p')[2], {
+            center: [59.94, 30.32],
+            zoom: 9
+        });
+    });
+    </script>
+
+</head>
+<body style="font-family:Arial">
+    <h3>Map</h3>
+    <p>Карта Москвы</p>
+    <div id="first_map" style="width:400px; height:300px"></div>
+    <p>Карта Санкт-Петербурга</p>
+    <p style="width:400px; height:200px"></p>
+    @*<script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?sid=ueOHl3sexkgIyh4Oq9kFBUiDNzFq7deW&amp;width=324&amp;height=316&amp;lang=ru_RU&amp;sourceType=constructor&amp;scroll=true"></script>*@
+</body>
+</html>
