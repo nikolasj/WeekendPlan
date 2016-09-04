@@ -31,7 +31,7 @@ namespace WeekendPlan.Models
         [Column("route_dates_from")]
         public DateTime RouteDatesFrom { get; set; }
 
-        public User Author { get; set; }
+        public UserProfile Author { get; set; }
         public List<Opportunity> Opportunities { get; set; }
         public List<Comment> Comments { get; set; }
         public List<String> Tags { get; set; }

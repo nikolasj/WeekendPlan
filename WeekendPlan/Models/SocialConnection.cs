@@ -21,7 +21,7 @@ namespace WeekendPlan.Models
         [Column("connection_type_name")]
         public String ConnectionTypeName { get; set; }
 
-        public User User1 { get; set; }
-        public User User2 { get; set; }
+        public UserProfile User1 { get; set; }
+        public UserProfile User2 { get; set; }
     }
 }

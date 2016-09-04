@@ -7,13 +7,13 @@ using System.Web;
 
 namespace WeekendPlan.Models
 {
-    public class User
+    public class UserProfile
     {
         [Key]
         [Column("user_id")]
         public Int32 UserId { get; set; }
         [Column("name")]
-        public String Name { get; set; }
+        public String name { get; set; }
         [Column("picture")]
         public String Picture { get; set; }
         [Column("city_id")]
@@ -25,7 +25,7 @@ namespace WeekendPlan.Models
         [Column("asp_net_user_id")]
         public String AspNetUserId { get; set; }
 
-        public City City { get; set; }
+        public City CurrentCity { get; set; }
         public List<Category> PreferredCategories { get; set; }
         public List<String> PreferredTags { get; set; }
         //public List<Additional> Additionals { get; set; }

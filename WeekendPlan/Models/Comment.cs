@@ -19,7 +19,7 @@ namespace WeekendPlan.Models
         [Column("parent_id")]
         public Int32 ParentId { get; set; }
 
-        public User Author { get; set; }
+        public UserProfile Author { get; set; }
         public List<Comment> Children { get; set; }
         public Comment Parent { get; set; }
     }

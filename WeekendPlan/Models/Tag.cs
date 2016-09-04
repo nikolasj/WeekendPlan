@@ -17,6 +17,6 @@ namespace WeekendPlan.Models
         [Column("user_id")]
         public Int32 UserId { get; set; }
 
-        public User Author { get; set; }
+        public UserProfile Author { get; set; }
     }
 }
