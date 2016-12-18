@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using WeekendPlan.DataAccessLayer;
 
 namespace WeekendPlan.Models
 {
@@ -16,14 +17,18 @@ namespace WeekendPlan.Models
         public Int32 Id { get; set; }
         [Column("publication_date")]
         public DateTime PublicationDate { get; set; }
-        [Column("dates")]
-        public String Dates { get; set; }
+        //[Column("dates")]
+        //public DateRange[] Dates { get; set; }
+        [Column("date_start")]
+        public String DateStart { get; set; }
+        [Column("date_end")]
+        public String DateEnd { get; set; }
         [Column("title")]
         public String Title { get; set; }
         [Column("short_title")]
         public String ShortTitle { get; set; }
         [Column("slug")]
-        public Int32 Slug { get; set; }
+        public String Slug { get; set; }
         [Column("place")]
         public String Place { get; set; }
         [Column("description")]
@@ -57,6 +62,14 @@ namespace WeekendPlan.Models
 
         public List<String> Tags { get; set; }
         public List<Comment> Comments { get; set; }
+
+        public static List<Event> GetEvents()
+        {
+            DbConnect connector = new DbConnect();
+            List<Event> events = connector.Events.ToList<Event>();
+
+            return events;
+        }
 
     }
 }

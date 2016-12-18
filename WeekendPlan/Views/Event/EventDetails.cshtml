@@ -1,0 +1,30 @@
+﻿@using WeekendPlan.ViewModels
+@model EventViewModel
+@{
+    ViewBag.Title = "Event details";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>EventDetails</title>
+</head>
+<body>
+    <div class="row" style="margin-top: 50px;">
+        <div class="col-md-2">
+            <h3 style="color:lightcoral ">@Model.Title</h3>
+            <br />
+            @Model.Title
+        </div>
+        <div class="col-md-8" style="margin-top: 30px;">
+            <p>Описание - @Model.BodyText</p>
+        </div>
+        <div class="col-md-2" style="margin-top: 30px;">
+            <p>Комментарии:</p>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using WeekendPlan.DataAccessLayer;
 
 namespace WeekendPlan.Models
 {
@@ -25,13 +26,13 @@ namespace WeekendPlan.Models
         [Column("body_text")]
         public String BodyText { get; set; }
         [Column("is_editors_choice")]
-        public Boolean IsEditorsChoice { get; set; }
+        public Boolean? IsEditorsChoice { get; set; }
         [Column("favorites_count")]
-        public Int32 FavoritesCount { get; set; }
+        public Int32? FavoritesCount { get; set; }
         [Column("genres")]
         public String Genres { get; set; }
         [Column("comments_count")]
-        public Int32 CommentsCount { get; set; }
+        public Int32? CommentsCount { get; set; }
         [Column("original_title")]
         public String OriginalTitle { get; set; }
         [Column("locale")]
@@ -75,5 +76,53 @@ namespace WeekendPlan.Models
 
         public List<Comment> Comments { get; set; }
         public List<String> Tags { get; set; }
+
+        public static List<Film> GetFilms()
+        {
+            DbConnect connector = new DbConnect();
+            List<Film> films = connector.Films.ToList<Film>();
+
+            return films;
+        }
+
+        public static List<Comment> GetComments(int? filmId)
+        {
+            List<Comment> filmComments = new List<Comment>();
+            DbConnect connector = new DbConnect();
+            List<CommentFilm> commentsFilmById = connector.CommentFilms.Where(x=>x.FilmId == filmId).ToList<CommentFilm>();
+            foreach(var c in commentsFilmById)
+            {
+                var comment = connector.Comments.FirstOrDefault(x => x.CommentId == c.CommentId);
+                var userId = comment.UserId;
+                comment.Author = connector.Users.FirstOrDefault(y => y.UserId == userId);
+
+                if (comment!=null)
+                {
+                    filmComments.Add(comment);
+                }
+            }
+            return filmComments;
+        }
+
+        public List<Comment> GetComments()
+        {
+            List<Comment> filmComments = new List<Comment>();
+            DbConnect connector = new DbConnect();
+            List<CommentFilm> commentsFilmById = connector.CommentFilms.Where(x => x.FilmId == this.FilmId).ToList<CommentFilm>();
+            foreach (var c in commentsFilmById)
+            {
+                var comment = connector.Comments.FirstOrDefault(x => x.CommentId == c.CommentId);
+                var userId = comment.UserId;
+                comment.Author = connector.Users.FirstOrDefault(y => y.UserId == userId);
+
+                if (comment != null)
+                {
+                    filmComments.Add(comment);
+                }
+            }
+            Comments = filmComments;
+            return filmComments;
+        }
+
     }
 }

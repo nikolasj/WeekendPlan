@@ -1,0 +1,52 @@
+﻿@using WeekendPlan.ViewModels
+@model FilmListViewModel
+@{
+    ViewBag.Title = "Films";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>FilmsView</title>
+    <script type="text/javascript">
+        function GenreChange(genre)
+        {
+            location.href = "/Film/GenreFilmsView/" + genre;
+        }
+
+    </script>
+</head>
+<body>
+    <div class="row" style="margin-top: 50px;">  
+        <br />
+        <div class="col-md-8">
+            @{ int i = 0;
+                foreach (var f in Model.Films)
+                {
+                    i++;
+                    <img class="img-rounded" width="80" height="100" src="@f.Poster" />
+
+                    <a class="btn btn-primary" href="~/Film/FilmDetails/@f.FilmId">@f.Title</a>
+
+                    if (i % 2 == 0)
+                    {
+                        <br />
+                    }
+                    if (i > 12)
+                    {
+                        break;
+                    }
+                }
+            }
+            </div>
+        <form action="~/Film/FilmSelectGenre/@Model.Genres" method="post">
+            <div class="col-md-4">
+                <b>Сортировать по жанрам:</b>@Html.DropDownList("Genres", (SelectList)ViewBag.DropDownValuesGenre, new { @class = "form-control", @onchange = "GenreChange(this.value)" })
+                @*<a class="btn btn-default">@Model.Genres</a>*@
+            </div>
+        </form>
+        </div>
+</body>
+</html>
