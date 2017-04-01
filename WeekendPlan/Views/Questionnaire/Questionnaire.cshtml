@@ -1,0 +1,99 @@
+﻿@using WeekendPlan.ViewModels
+@model QuestionnaireListViewModel
+@{
+    ViewBag.Title = "Questionnaire";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Questionnaire</title>
+    <script>
+        var questionId = [];
+        var indexQuestion = [];
+        function gotopage(id) {
+            //alert(id);
+            var newUrl = updateQueryStringParameter(location.href, 'page', id);
+            //location.href = location.href+"&page="+id;
+            //alert(newUrl.replace('#',''));
+
+            location.href = newUrl.replace('#', '');
+        }
+
+        function updateQueryStringParameter(uri, key, value) {
+            var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+            var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+            if (uri.match(re)) {
+                return uri.replace(re, '$1' + key + "=" + value + '$2');
+            }
+            else {
+                return uri + separator + key + "=" + value;
+            }
+        }
+
+        function saveQuestionId(n) {
+            for (var i = 0; i < questionId.length; i++) {
+                if (questionId[i] == n) {
+                    var style = $("#p_child_" + n).css("background-color", "Silver");
+                    delete questionId[i];
+                    $("#saveChildren").val(questionId);
+                    return;
+                }
+            }
+            indexQuestion.push(n);
+            $("#p_child_" + n).css("background-color", "GreenYellow");
+            $("#hiddenChildren").show();
+            var index = parseInt(n);
+            SetQuestionId(index);
+        }
+
+        function SetQuestionId(index) {
+            questionId.push(index);
+            $("#saveChildren").val(questionId);
+
+        }
+    </script>
+</head>
+<body>
+    <div class="row" style="margin-top: 50px;">
+        <br />
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+
+            @if (Request.QueryString["type"] == "child" && Model.Questions[Model.QuestionNumber].Children.Count > 0)
+            {
+                <form action="~/Questionnaire/SaveTags/?questionId=@Model.Questions[Model.QuestionNumber].QuestionId&nextQuestionId=@Model.Questions[Model.QuestionNumber].NextQuestionId" method="post">                  
+                     @foreach (var child in Model.Questions[Model.QuestionNumber].Children)
+                    {
+                      
+                        <span class="btn btn-default" id="p_child_@child.QuestionId" onclick="saveQuestionId(@child.QuestionId);"><b>@child.Questions</b></span>
+                        <img src="@child.Image" style="height:200px" />
+                        <p style="background-color:green; visibility:hidden" id="hiddenChildren"> </p>
+                    }
+                    <input type="hidden" id="saveChildren" name="saveChildren" value="" />
+
+                    <input type="submit" id="saveTags" name="saveTags" value="Дальше" />
+                </form>
+            }
+            else
+            {
+                if (!String.IsNullOrWhiteSpace(Request.QueryString["questionId"]) && Request.QueryString["questionId"] != "0")
+                {
+
+                    <p><b>@Model.Questions.Find(x => x.QuestionId.ToString() == Request.QueryString["questionId"]).Questions</b></p>
+                    <img src="@Model.Image" style="width:200px; height:200px" />
+                    <p style="margin-left:70px">
+                        <a class="btn btn-default" href="~/Questionnaire/Questionnaire/?questionId=@Model.Questions.Find(x => x.QuestionId.ToString() == Request.QueryString["questionId"]).QuestionId&type=child" id="questionYes" name="question">Да</a>
+                        <a class="btn btn-default" href="~/Questionnaire/Questionnaire/?questionId=@Model.Questions.Find(x => x.QuestionId.ToString() == Request.QueryString["questionId"]).NextQuestionId" id="questionNo" name="question">Нет</a>
+                    </p>
+                }
+
+            }
+
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</body>
+</html>

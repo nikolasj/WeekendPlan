@@ -1,0 +1,44 @@
+﻿@using WeekendPlan.ViewModels
+@model RouteListViewModel
+@{
+    ViewBag.Title = "Routes";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Routes</title>
+</head>
+<body>
+    <div class="row" style="margin-top: 50px;">
+        <br />
+        <div class="col-md-3">
+            <form action="~/Opportunity/Opportunities" method="post">
+                <b>Выберите дату:</b><br />
+                <input id="Date" type="datetime-local" class="form-control" name="Date" value="@ViewBag.Date" /> @*input id="TaskDataStart" style="display:none;" type="datetime-local" class="form-control" name="TaskDataStart" value="@Model.DateStartStr">*@
+                <b>Выберите город:</b>
+                <p>@Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control" })</p>
+                <b>Выберите тип отдыха:</b>
+                <select class="form-control" id="TypeVacation" name="Priority">
+                    <option value="1" @(Model.TypeVacation == 1 ? "selected" : "")>Активный</option>
+                    <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Пассивный</option>
+                </select>
+                <br />
+                <button class="btn btn-primary" id="Search" type="submit" value="Искать" name="Search">Искать маршрут</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            @foreach(var r in Model.Routes)
+            {
+                <img src="@r.Opportunities[0].Image"/> 
+                <b>@r.Name</b><br />
+                <b>@r.EventCost</b><br />
+                <b>@r.Duration</b>
+                <br />
+            }
+        </div>
+    </div>
+</body>
+</html>

@@ -7,15 +7,37 @@ using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
 using WeekendPlan.Models;
+using WeekendPlan.ViewModels;
 
 namespace WeekendPlan.Controllers
 {
     [RequireHttps]
     public class HomeController : Controller
     {
+
         public ActionResult Index()
         {
-            return View();
+            UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
+            ViewModels.IndexViewModel indexLVM = new ViewModels.IndexViewModel();
+            indexLVM.Events = new List<EventViewModel>();
+            int count = 0;
+            foreach (Event e in Event.GetEvents().Where(x => DateTime.Compare(DateTime.Parse(x.DateEnd), DateTime.Now) > 0).OrderByDescending(x => x.FavoritesCount).Take(4))
+            {
+                count++;
+                EventViewModel eventVM = new EventViewModel(e, null);
+                indexLVM.Events.Add(eventVM);
+            }
+            if (user != null)
+            {
+                var userTags = Tag.GetTagsByUser(user.UserId);
+                if (userTags != null)
+                {
+                    indexLVM.TagsUser = userTags;
+                }
+
+                return View("Index", indexLVM);
+            }
+            return View("Index", indexLVM);
         }
 
         public ActionResult About()
@@ -25,12 +47,19 @@ namespace WeekendPlan.Controllers
             return View("About");
         }
 
+        public ActionResult Yandex()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View("Yandex");
+        }
+
         public ActionResult Map()
         {
             ViewBag.Message = "Your application description page.";
 
             return View("Map");
-        } 
+        }
 
         public ActionResult Contact()
         {

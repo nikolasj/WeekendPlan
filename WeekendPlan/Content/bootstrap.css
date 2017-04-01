@@ -2017,6 +2017,10 @@ textarea.input-lg {
           user-select: none;
 }
 
+.questionbtn {
+      margin-left:20px;
+  }
+
 .btn:focus {
   outline: thin dotted #333;
   outline: 5px auto -webkit-focus-ring-color;
@@ -2093,6 +2097,7 @@ fieldset[disabled] .btn-default.active {
   color: #ffffff;
   background-color: #428bca;
   border-color: #357ebd;
+  margin-bottom: 5px !important;
 }
 
 .btn-primary:hover,
@@ -6813,4 +6818,5 @@ td.visible-print {
   td.hidden-print {
     display: none !important;
   }
+
 }

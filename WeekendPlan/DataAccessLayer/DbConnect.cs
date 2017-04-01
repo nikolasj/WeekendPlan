@@ -25,7 +25,17 @@ namespace WeekendPlan.DataAccessLayer
         public DbSet<Event> Events { get; set; }
         public DbSet<Genres> Genres { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Tag> Tags { get; set; }
         public DbSet<CommentFilm> CommentFilms { get; set; }
+        public DbSet<CommentPlace> CommentPlaces { get; set; }
+        public DbSet<CommentEvent> CommentEvents { get; set; }
+        public DbSet<TagEvent> TagEvents { get; set; }
+        public DbSet<TagPlace> TagPlaces { get; set; }
+        public DbSet<TagFilm> TagFilms { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Place> Places { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Show> Shows { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -35,6 +45,16 @@ namespace WeekendPlan.DataAccessLayer
             modelBuilder.Entity<Genres>().ToTable("Genres");
             modelBuilder.Entity<Comment>().ToTable("Comment");
             modelBuilder.Entity<CommentFilm>().ToTable("CommentFilm");
+            modelBuilder.Entity<CommentPlace>().ToTable("CommentPlace");
+            modelBuilder.Entity<CommentEvent>().ToTable("CommentEvent");
+            modelBuilder.Entity<TagEvent>().ToTable("TagEvent");
+            modelBuilder.Entity<TagPlace>().ToTable("TagPlace");
+            modelBuilder.Entity<TagFilm>().ToTable("TagFilm");
+            modelBuilder.Entity<City>().ToTable("City");
+            modelBuilder.Entity<Tag>().ToTable("Tag");
+            modelBuilder.Entity<Place>().ToTable("Place");
+            modelBuilder.Entity<Question>().ToTable("Question");
+            modelBuilder.Entity<Show>().ToTable("Show");
 
             base.OnModelCreating(modelBuilder);
         }

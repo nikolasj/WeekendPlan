@@ -1,0 +1,90 @@
+﻿@using WeekendPlan.ViewModels
+@model ProfileViewModel
+@{
+    ViewBag.Title = "ProfileView";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Profile</title>
+</head>
+<body>
+    <form action="~/Profile/ChangeProfile/@Model.UserId" method="post">
+        <div class="row" style="margin-top: 60px;">
+            <div class="col-md-4">
+                <input id="pageImage" name="files" type="file" />
+                @{ string src = "";
+                    if (!String.IsNullOrEmpty(Model.Picture))
+                    {
+                        string path = System.IO.Path.Combine(Model.webRoot, "Content\\Images\\UserPicture");
+                        if (File.Exists(System.IO.Path.Combine(path, Model.Picture)))
+                        {
+                            src = String.Format("/Content/Images/UserPicture/{0}", Model.Picture);
+                            <a href="@src" target="_blank"><img class="pageImage" src="@src" /></a>
+                        }
+                    }
+                }
+
+            </div>
+            <div class="col-md-5">
+                <p>Имя: <input class="form-control" id="UserName" type="text" name="UserName" value="@Model.Name" /></p>
+                <p>Город: @Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control"})</p>
+                <p>Права:
+                    @if (Model.DriverLicense == true)
+                    {
+                        <input id="UserDriverLicense" type="checkbox" name="UserDriverLicense" checked="checked" />
+                    }
+                    else
+                    {
+                        <input id="UserDriverLicense" type="checkbox" name="UserDriverLicense" />
+                    }
+                </p>
+                <p>Машина: 
+       @if (Model.Car==true)
+       {
+            <input id="UserCar" type="checkbox" name="UserCar" checked="checked" />
+       }
+       else
+       {
+            <input id="UserCar" type="checkbox" name="UserCar"/>
+       }
+                </p>
+                <p>
+                    Количество попутчиков:  
+                    <select id="GroupCount" name="GroupCount">
+                        @for (int i = 1; i <= 10; i++)
+                        {
+                            if (i == Model.GroupCount || (Model.GroupCount == null && i == 2))
+                            {
+                                <option value="@i" selected>@i</option>
+                            }
+                            else
+                            { 
+                                <option value="@i">@i</option>
+                            }
+                        }
+                    </select>
+                </p>
+
+
+
+
+                                      <button class="btn btn-primary" id="Save" type="submit" value="Сохранить" name="btnSave">Сохранить</button>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-default" href="~/Profile/CommentsByUser">Комментарии</a><br />
+                <a class="btn btn-default" href="~/Profile/UsersView">Родственники</a>
+                <p>Тэги: 
+                @foreach(var t in Model.Tags)
+                {
+                    <a href="~/Search/Search?tag=@t.Text">#@t.Text</a>
+                }
+                </p>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

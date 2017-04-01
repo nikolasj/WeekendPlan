@@ -11,6 +11,7 @@ namespace WeekendPlan.ViewModels
     public class FilmViewModel
     {
         public Int32 FilmId { get; set; }
+        public Int32 Id { get; set; }
         public String SiteUrl { get; set; }
         public String PublicationDate { get; set; }
         public String Slug { get; set; }
@@ -36,19 +37,31 @@ namespace WeekendPlan.ViewModels
         public String Writer { get; set; }
         public String Awards { get; set; }
         public String Trailer { get; set; }
-        public String Images { get; set; }
+        public String[] Images { get; set; }
+        public String FirstImage
+        {
+            get
+            {
+                if (Images != null)
+                    if (Images.Count() > 0)
+                        return Images[0].Trim();
+                return "https://cdn1.iconfinder.com/data/icons/delivery-logistics-1/512/Logistics-24-512.png";
+            }
+        }
         public String Poster { get; set; }
         public String Url { get; set; }
         public String ImdbUrl { get; set; }
         public String ImdbRating { get; set; }
 
         public List<Comment> Comments { get; set; }
-        public List<String> Tags { get; set; }
+        public List<Tag> Tags { get; set; }
+        public List<Tag> TagsUser { get; set; }
         public List<Film> SimilarMovies { get; set; }
 
-        public FilmViewModel(Film film)
+        public FilmViewModel(Film film, int? userId)
         {
             FilmId = film.FilmId;
+            Id = film.Id;
             SiteUrl = film.SiteUrl;
             PublicationDate = film.PublicationDate;
             Slug = film.Slug;
@@ -74,13 +87,16 @@ namespace WeekendPlan.ViewModels
             Writer = film.Writer;
             Awards = film.Awards;
             Trailer = film.Trailer;
-            Images = film.Images;
+            Images = film.Images.Split(new char[] { ',' });
             Poster = film.Poster;
             Url = film.Url;
             ImdbUrl = film.ImdbUrl;
             ImdbRating = film.ImdbRating;
             Comments = film.GetComments();
-            
+            Tags = film.GetTagsCommon();
+            if (!(userId == 0 || userId == null))
+                TagsUser = film.GetTagsByUser(userId.Value);
+
         }
     }
 }

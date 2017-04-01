@@ -1,27 +1,47 @@
-﻿@{
+﻿@using WeekendPlan.ViewModels
+@model IndexViewModel
+@{
     ViewBag.Title = "Home Page";
 }
 
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>Популярные события</h1>
+    @if (Model.Events != null)
+    {
+        <br />
+            foreach (var e in Model.Events)
+            {
+                <a href="~/Event/EventDetails/@e.EventId" title="@e.Title" style="margin-right:45px">  <img class="img-rounded" width="200" src="@e.FirstImage" /></a>
+
+        }
+    }
+
 </div>
 
 <div class="row">
     <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
+        <h2>Построить маршрут</h2>
+        @*<p>
             ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
             enables a clean separation of concerns and gives you full control over markup
             for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        </p>*@
+        <p><a class="btn btn-default" href="~/Opportunity/Opportunities">Маршруты</a></p>
     </div>
     <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+        <h2>Мои интересы</h2>
+        @if (Model.TagsUser == null)
+        {
+            <p>Заполните анкету</p>
+                <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Перейти к анкете</a></p>
+        }
+        else
+        {
+            foreach (var t in Model.TagsUser)
+            {
+                <a href="~/Search/Search?tag=@t.Text">#@t.Text</a>
+            }
+        }
     </div>
     <div class="col-md-4">
         <h2>Web Hosting</h2>

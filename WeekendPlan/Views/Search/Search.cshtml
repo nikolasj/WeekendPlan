@@ -1,0 +1,347 @@
+﻿@using WeekendPlan.ViewModels
+@model SearchListViewModel
+@{
+    ViewBag.Title = "Users";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Search</title>
+
+    <script type="text/javascript">
+        function gotopage(id) {
+            //alert(id);
+            var newUrl = updateQueryStringParameter(location.href, 'page', id);
+            //location.href = location.href+"&page="+id;
+            //alert(newUrl.replace('#',''));
+
+            location.href = newUrl.replace('#', '');
+        }
+
+        function updateQueryStringParameter(uri, key, value) {
+            var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+            var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+            if (uri.match(re)) {
+                return uri.replace(re, '$1' + key + "=" + value + '$2');
+            }
+            else {
+                return uri + separator + key + "=" + value;
+            }
+        }
+
+        function GenreChange(genre) {
+            alert(genre);
+            location.href = "/Film/GenreFilmsView/" + genre;
+        }
+
+        function change_array(id, count) {
+            var elem = document.getElementById('numberpage');
+            elem.innerHTML = id + 1;
+        }
+    </script>
+</head>
+<body>
+    <div class="row" style="margin-top: 40px;">
+        <br />
+        @* Films *@
+        @{
+            if (Model.Films.Count > 0)
+            {
+                <div class="row">
+                    
+                    <b>Фильмы:</b>
+                    <br />
+                    <div class="col-md-4">
+                        @{ int i = 0;
+                            foreach (var f in Model.Films)
+                            {
+                                i++;
+                                if (i % 2 != 0)
+                                {
+                                    <img class="img-rounded" height="200" src="@f.Poster" />
+                                    <br />
+                                    <a class="btn btn-primary" href="~/Film/FilmDetails/@f.FilmId">@f.Title</a>
+                                    <br />
+                                    if (i > 5)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        <br />
+                        <br />
+                        <br />
+                        @{
+                            bool prevFlag = true;
+                            int curNumber = Model.CurrentNumber % 6;
+                            for (int l = Model.CurrentNumber - curNumber + 1; l < Model.Count; l++)
+                            {
+                                if (Model.CurrentNumber > 5 && prevFlag)
+                                {
+                                    <a class="btn btn-default" href="#" onclick="gotopage(@l - 6);" id="numberpage"><b><</b></a>
+                                    prevFlag = false;
+                                }
+                                if (l == Model.CurrentNumber)
+                                {
+                                    <a style="background-color:blue;color:white" class="btn btn-default" href="~/Search/FilmsViewByPage/@l">@l</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-default" href="#" onclick="gotopage(@l);" id="numberpage">@l</a>
+                                }
+                                if (l % 6 == 0)
+                                {
+                                    l++;
+                                    <a class="btn btn-default" href="#" onclick="gotopage(@l);" id="numberpage"><b>></b></a>
+                                    break;
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="col-md-4">
+                        @{ int k = 0;
+                            foreach (var f in Model.Films)
+                            {
+                                k++;
+                                if (k % 2 == 0)
+                                {
+                                    <img class="img-rounded" height="200" src="@f.Poster" />
+                                    <br />
+                                    <a class="btn btn-primary" href="~/Film/FilmDetails/@f.FilmId">@f.Title</a>
+                                    <br />
+                                    if (k > 5)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                    @if (Model.Genres != null)
+                    {
+                        <form action="~/Film/FilmSelectGenre/@Model.Genres" method="post">
+                            <div class="col-md-4">
+                                <b>Фильтровать по жанрам:</b>@Html.DropDownList("Genres", (SelectList)ViewBag.DropDownValuesGenre, new { @class = "form-control", @onchange = "GenreChange(this.value)" })
+                                @*<a class="btn btn-default">@Model.Genres</a>*@
+                            </div>
+                        </form>
+                    }
+                    <div class="col-md-4">
+                        <form action="~/Search/Search?type=film" method="post">
+                            <p>
+                                <b>Поиск по названию: </b><input type="text" id="searchTitle" name="searchTitle" style="width: 172px;" />
+                                <span><input type="image" id="search" name="search" value="Искать" src="~/Content/images/userPicture/search.png" /></span>
+                            </p>
+                            @*<a class="btn btn-default">@Model.Genres</a>*@
+
+                        </form>
+                        <div>
+                            <p>
+                                Тэги:
+                                @foreach (var t in Model.Tags)
+                                {
+                                    <a href="~/Search/Search?tag=@t.Text&type=film">#@t.Text</a>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                            }
+        }
+        @* Events *@
+        @{
+            if (Model.Events.Count > 0)
+            {
+                <div class="row">
+                    <div class="col-md-4">
+                        
+                        <b>События:</b>
+                        <br />
+                        @{ int ii = 0;
+                            foreach (var e in Model.Events)
+                            {
+                                ii++;
+                                if (ii % 2 != 0)
+                                {
+                                    <img class="img-rounded" width="200" src="@e.FirstImage" />
+                                    <br />
+                                    <a class="btn btn-primary" href="~/Event/EventDetails/@e.EventId">@e.Title</a>
+                                    <br />
+                                    if (ii > 5)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        <br />
+                        @{
+                            bool prevFlag = true;
+                            int curNumber = Model.CurrentNumber % 6;
+                            for (int l = Model.CurrentNumber - curNumber + 1; l < Model.Count; l++)
+                            {
+                                if (Model.CurrentNumber > 5 && prevFlag)
+                                {
+                                    <a class="btn btn-default" href="#" onclick="gotopage(@l - 6);" id="numberpage"><b><</b></a>
+                                    prevFlag = false;
+                                }
+                                if (l == Model.CurrentNumber)
+                                {
+                                    <a style="background-color:blue;color:white" class="btn btn-default" href="~/Search/FilmsViewByPage/@l">@l</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-default" href="#" onclick="gotopage(@l);" id="numberpage">@l</a>
+                                }
+                                if (l % 6 == 0)
+                                {
+                                    l++;
+                                    <a class="btn btn-default" href="#" onclick="gotopage(@l);" id="numberpage"><b>></b></a>
+                                    break;
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="col-md-4" style="margin-top: 20px;">
+                        @{ int iil = 0;
+                            foreach (var e in Model.Events)
+                            {
+                                iil++;
+                                if (iil % 2 == 0)
+                                {
+                                    <img class="img-rounded" width="200" src="@e.FirstImage" />
+                                    <br />
+                                    <a class="btn btn-primary" href="~/Event/EventDetails/@e.EventId">@e.Title</a>
+                                    <br />
+                                    if (iil > 5)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="col-md-4">
+                        <form action="~/Search/Search?type=event" method="post">
+                            <b>Поиск по названию:</b><input type="text" id="searchTitle" name="searchTitle" />
+                            <input type="submit" id="search" name="search" value="Искать" />
+                            @*<a class="btn btn-default">@Model.Genres</a>*@
+
+                        </form>
+                        <div>
+                            <p>
+                                Тэги:
+                                @foreach (var t in Model.Tags)
+                                {
+                                    <a href="~/Search/Search?tag=@t.Text&type=event">#@t.Text</a>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                            }
+        }
+        @* Places *@
+        @{
+            if (Model.Places.Count > 0)
+            {
+                <div class="row">
+                    <div class="col-md-4">
+                        
+                        <b>Места:</b>
+                        <br />
+                        @{ int iii = 0;
+                            foreach (var e in Model.Places)
+                            {
+                                iii++;
+                                if (iii % 2 != 0)
+                                {
+                                    <img class="img-rounded" width="200" src="@e.FirstImage" />
+                                    <br />
+                                    <a class="btn btn-primary" href="~/Place/PlaceDetails/@e.PlaceId">@e.Title</a>
+                                    <br />
+                                    if (iii > 5)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        <br />
+                        @{
+                            bool prevFlag = true;
+                            int curNumber = Model.CurrentNumber % 6;
+                            for (int l = Model.CurrentNumber - curNumber + 1; l < Model.Count; l++)
+                            {
+                                if (Model.CurrentNumber > 5 && prevFlag)
+                                {
+                                    <a class="btn btn-default" href="#" onclick="gotopage(@l - 6);" id="numberpage"><b><</b></a>
+                                    prevFlag = false;
+                                }
+                                if (l == Model.CurrentNumber)
+                                {
+                                    <a style="background-color:blue;color:white" class="btn btn-default" href="~/Search/FilmsViewByPage/@l">@l</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-default" href="#" onclick="gotopage(@l);" id="numberpage">@l</a>
+                                }
+                                if (l % 6 == 0)
+                                {
+                                    l++;
+                                    <a class="btn btn-default" href="#" onclick="gotopage(@l);" id="numberpage"><b>></b></a>
+                                    break;
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="col-md-4" style="margin-top: 20px;">
+                        @{ int iiil = 0;
+                            foreach (var e in Model.Places)
+                            {
+                                iiil++;
+                                if (iiil % 2 == 0)
+                                {
+                                    <img class="img-rounded" width="200" src="@e.FirstImage" />
+                                    <br />
+                                    <a class="btn btn-primary" href="~/Place/PlaceDetails/@e.PlaceId">@e.Title</a>
+                                    <br />
+                                    if (iiil > 5)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="col-md-4">
+                        <form action="~/Search/Search?type=place" method="post">
+                            <b>Поиск по названию:</b><input type="text" id="searchTitle" name="searchTitle" />
+                            <input type="submit" id="search" name="search" value="Искать" />
+                        </form>
+                        <div>
+                            <p>
+                                Тэги:
+                                @{ int countTags = 0;
+                                    foreach (var t in Model.Tags)
+                                    {
+                                        countTags++;
+                                        if (countTags > 29) { break; }
+                                        <a href="~/Search/Search?tag=@t.Text&type=place">#@t.Text</a>
+                                    }
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                                    }
+        }
+
+    </div>
+
+</body>
+</html>

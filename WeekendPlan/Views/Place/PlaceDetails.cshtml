@@ -1,0 +1,122 @@
+﻿@using WeekendPlan.ViewModels
+@model PlaceViewModel
+
+@{
+    ViewBag.Title = "Event details";
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    @*<meta name="viewport" content="width=device-width" />*@
+    <title>EventDetails</title>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script src="~/Scripts/yandex_map.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        ymaps.ready(function () {
+            init(
+                @Model.Coords.Lon,
+                @Model.Coords.Lat,
+                "@Model.Title",
+                "<strong> @Model.Title </strong> </br> @Model.Address @((String.IsNullOrWhiteSpace(Model.Subway))?"": "(м. "+@Model.Subway+")")"
+                )
+        });
+
+        function ChangeImagePrev()
+        {
+            var index = parseInt($("#currentImageIndex").val());
+            if (index - 1 >= 0)
+            {
+                SetImageByIndex(index-1);
+            }
+        }
+        function ChangeImageNext()
+        {
+            var index = parseInt($("#currentImageIndex").val());
+            var imgs = $("#hiddenImagesArray").val().split(";");
+            var sizeImagesArray = imgs.length;
+            if (index + 1 <= sizeImagesArray-1)
+            {
+                SetImageByIndex(index+1);
+            }
+        }
+        function SetImageByIndex(n)
+        {
+            var imgs = $("#hiddenImagesArray").val().split(";");
+            $("#placeImage").attr("src", imgs[n]);
+            $("#currentImageIndex").val(n);
+            //alert(imgs[n]);
+        }
+        function ChangeTag()
+        {
+            $("#tagsEdit").show();
+            $("#tagsTextUser").hide();
+            $("#editTags").hide();
+        }
+    </script>
+</head>
+<body>
+    <div class="row" style="margin-top: 50px;">
+        <div class="col-md-4">
+            <h3 style="color:lightcoral ">@Model.Title</h3>
+            <br />
+            @* Images *@
+            <input type="hidden" value="@String.Join(";",Model.Images)" size="30" style="margin: 0px; width: 243px; height: 137px;" id="hiddenImagesArray"/>
+            <p>
+                <span class="btn btn-default" onclick="ChangeImagePrev();"><b><</b></span>
+                <img class="img-rounded" width="270" height="200" src="@Model.FirstImage" id="placeImage" />
+                <input type="hidden" value="0" id="currentImageIndex" />
+                <span class="btn btn-default" onclick="ChangeImageNext();"><b>></b></span>
+            </p>
+            Адрес: <strong>@Model.Address</strong>
+            <br />
+            @* Tags *@
+            <form action="~/Place/PlaceTags/@Model.PlaceId" method="post">
+                <p>Теги:</p>
+                <p id="tagsEdit" style="display:none;">
+                    <textarea type="text" id="inputTags" name="inputTags" rows="4" cols="20" style="margin: 0px; width: 243px; height: 137px;">@String.Join(" ", Model.TagsUser.Select(x => "#" + x.Text).ToList())
+                    </textarea>
+                    <input class="btn btn-primary" id="SaveTags" type="submit" value="save" name="btnSave" />
+                </p> 
+                <p id="tagsText">
+                @foreach (var c in Model.Tags)
+                {
+                    <a href="~/Search/Search?tag=@c.Text">#@c.Text </a>
+                }
+                   
+                <span id="tagsTextUser">
+                    @foreach (var c in Model.TagsUser)
+                    {
+                        <a href="~/Search/Search?tag=@c.Text">#@c.Text </a>
+                    }
+                </span>
+                </p>
+                <span class="btn" onclick="ChangeTag();" id="editTags">Изменить теги</span>
+                <br />
+            </form>
+            @* Comment *@
+            <br />
+            <form action="~/Place/PlaceComments/@Model.PlaceId" method="post">
+                <p>Комментарии:</p>
+                @foreach (var c in Model.Comments)
+            {
+                    <a href="~//">@c.Author.Name</a>
+                    <p>@c.Text</p>
+                }
+
+                <textarea id="Comment" name="Comment" rows="4" cols="20" style="margin: 0px; width: 243px; height: 137px;">Напишите комментарий...</textarea>
+                <input class="btn btn-primary" id="Save" type="submit" value="save" name="btnSave" />
+            </form>
+
+        </div>
+        <div class="col-md-5" style="margin-top: 30px;">
+            @Html.Raw(@Model.BodyText)
+        </div>
+        <div id="map" style="width: 270px; height: 300px; margin-top:36px" class="col-md-3"></div>
+    </div>
+</body>
+</html>

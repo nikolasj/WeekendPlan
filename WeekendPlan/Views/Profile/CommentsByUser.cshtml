@@ -1,0 +1,38 @@
+﻿@using WeekendPlan.ViewModels
+@model ProfileViewModel
+@{
+    ViewBag.Title = "Comments";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CommentByUser</title>
+</head>
+<body>
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-md-4">
+            @{  <b>Комментарии к фильмам:</b><br />
+                foreach (var c in Model.FilmComments)
+                {
+                    @*@c.Author.Name<br />*@
+                    <p>Комментарий: @c.Text</p>
+                    <p>Название фильма:<a href="~/Film/FilmDetails/@c.Film.FilmId">@c.Film.Title</a></p><br />
+                    <p>-------------</p>
+                }
+            }
+         </div>
+        <div class="col-md-4">
+            @{  <b>Комментарии к событиям:</b><br />
+                foreach (var c in Model.EventComments)
+                {
+                    @*@c.Author.Name<br />*@
+                    @c.Text<br />
+                    <p>-------------</p>
+                }
+            }
+        </div>
+    </div>
+</body>
+</html>

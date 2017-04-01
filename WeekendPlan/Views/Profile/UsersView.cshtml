@@ -1,0 +1,52 @@
+﻿@using WeekendPlan.ViewModels
+@model ProfileListViewModel
+@{
+    ViewBag.Title = "Users";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Users</title>
+    @*<script type="text/javascript">
+        function GenreChange(genre)
+        {
+            location.href = "/Film/GenreFilmsView/" + genre;
+        }
+
+    </script>*@
+</head>
+<body>
+    <div class="row" style="margin-top: 50px;">
+        <br />
+        @*<form action="~/Profile/Relatives" method="post">*@
+            <div class="col-md-8">
+                @{ int i = 0;
+                    foreach (var f in Model.Profiles)
+                    {
+                        i++;
+                        <img class="img-rounded" width="80" height="100" src="@f.Picture" />
+
+                        <a class="btn btn-primary" href="~/Profile/ProfileView/@f.UserId" id="UserName">@f.Name</a>
+                        @*<input id="Relative" type="checkbox" name="Relative" />
+                        <p style="display:none" id="UserId">@f.UserId</p>*@
+                        if (i % 2 == 0)
+                        {
+                            <br />
+                        }
+                        if (i > 12)
+                        {
+                            break;
+                        }
+                    }
+                }
+                <br />
+                @*<button class="btn btn-primary" id="Save" type="submit" value="Сохранить" name="btnSave">Сохранить</button>*@
+            </div>
+
+            @*</form>*@
+</div>
+</body>
+</html>

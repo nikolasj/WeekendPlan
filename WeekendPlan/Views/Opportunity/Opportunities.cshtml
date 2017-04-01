@@ -1,0 +1,124 @@
+﻿@using WeekendPlan.ViewModels
+@model OpportunityListViewModel
+@{
+    ViewBag.Title = "Opportunities";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Opportunities</title>
+    @*<script src="~/Scripts/jquery-1.9.1.js"></script>*@
+    <script src="~/Scripts/PriorityStyle.js"></script>
+    <script src="~/Scripts/checkboxForCalendar.js"></script>
+    <script src="~/Scripts/calendarForDate.js"></script>
+    <script src="~/Scripts/calendarForWeek.js"></script>
+    <script src="~/Scripts/timeLineForTaskCalendar.js"></script>
+    <script src="~/Scripts/checkboxCalendarPeriod.js"></script>
+    <title>TaskListView</title>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/custom_view.js" type="text/javascript"></script>
+    <script src="~/Scripts/yandex_map.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        ymaps.ready(function () {
+            init_many(
+               @Model.Opportunities[0].Coords.Lon,
+               @Model.Opportunities[0].Coords.Lat,
+                "",
+                ""
+                 )
+        });
+
+    </script>
+</head>
+<body>
+    @*<div class="row" style="margin-top: 40px;">
+            <br />
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                @foreach (var o in Model.Opportunities)
+                {
+                    <b>@o.Title</b>
+                        <p>@o.Description</p>
+                        <p>@o.DateFrom - @o.DateTo</p>
+                        <br />
+                }
+            </div>
+            <div class="col-md-3"> </div>
+        </div>*@
+    <br />
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-3">
+            <form action="~/Opportunity/Opportunities" method="post">
+                <b>Выберите дату:</b><br />
+                <input id="Date" type="datetime-local" class="form-control" name="Date" value="@ViewBag.Date" /> @*input id="TaskDataStart" style="display:none;" type="datetime-local" class="form-control" name="TaskDataStart" value="@Model.DateStartStr">*@
+                <b>Выберите город:</b>
+                <p>@Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control" })</p>
+                <b>Выберите тип отдыха:</b>
+                <select class="form-control" id="TypeVacation" name="Priority">
+                    <option value="1" @(Model.TypeVacation == 1 ? "selected" : "")>Активный</option>
+                    <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Пассивный</option>
+                </select>
+                <br />
+                <button class="btn btn-primary" id="Search" type="submit" value="Искать" name="Search">Искать маршрут</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            @*style="float:left;"*@
+
+        <br />
+        @for (int i = 0; i <= 23; i++)
+            {
+                bool flagTime = true;
+                foreach (var t in Model.Opportunities)
+                {
+                    if (i == t.TimeHour && t.DateFrom != null) //t.Date_start != null &&
+                    {
+                    <div id="TaskCalendarTime" style="width:480px; height:33px; background-color:#BEBEBE; margin-bottom:2px; display:block;">
+                        <a style="text-decoration: none;">@i:00</a>
+                        <a href="#" style="text-decoration: none;" title="Изменить задачу!">@t.Title</a>
+                        @*<div style=" display:inline-block">(@t.DateTo.ToShortDateString())</div>*@
+                        @*<input id="CheckboxDone_@t.OpportunityId" type="checkbox" data-target="~/Opportunity/MarkOpportunityDone/@t.OpportunityId" />*@
+                        <a href="~/Opportunity/MarkOpportunityDelete/@t.OpportunityId"><img src="https://www.0629.com.ua/design/img/cross-gr.png" /></a>
+                    </div>
+                    flagTime = false;
+                }
+                if (i == t.TimeHour && t.DateFrom == null) //t.Date_start != null &&
+                {
+                    <div id="TaskCalendarTime" style="width:480px; height:33px; background-color:#BEBEBE; margin-bottom:2px; display:block;">
+                        <a style="text-decoration: none">@i:00</a>
+                        <a href="#" style="text-decoration: none;" title="Изменить задачу!">@t.Title</a>
+                        @*<div style=" display:inline-block">@t.Duration</div>*@
+                        <input id="CheckboxDone_@t.OpportunityId" type="checkbox" data-target="~/Opportunity/MarkOpportunityDone/@t.OpportunityId" />
+                        <a href="/Task/TaskMovePeriod/@t.OpportunityId"><img src="https://www.0629.com.ua/design/img/cross-gr.png" /></a>
+                    </div>
+                    flagTime = false;
+                }
+
+            }
+            if (flagTime)
+            {
+                <div id="TaskCalendarTime" style="width:480px; height:33px; background-color:#B0DCE0; margin-bottom:2px; ">
+                    @if (i >= 0 && i < 8)
+                    { continue; }
+                    <a id="CreateTask" style="text-decoration: none;">@i:00</a>
+                </div>
+            }
+        }
+        <b>------------------------------------------------------------------------------------------------</b>
+
+    </div>
+</div>
+<div id="map" style="width: 370px; height: 300px; margin-top: -33px; margin-left: 481px;" class="col-md-3"></div>
+<br />
+<br />
+<details style="width: 370px; height: 300px; margin-left: 481px;">
+    <div id="viewContainer" style="width: 370px; height: 300px;" class="col-md-3"></div>
+</details>
+</body>
+</html>

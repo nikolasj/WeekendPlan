@@ -16,7 +16,7 @@ namespace WeekendPlan.ViewModels
         public String Title { get; set; }
         public String ShortTitle { get; set; }
         public String Slug { get; set; }
-        public String Place { get; set; }
+        public Int32 Place { get; set; }
         public String Description { get; set; }
         public String BodyText { get; set; }
         public String Location { get; set; }
@@ -25,17 +25,28 @@ namespace WeekendPlan.ViewModels
         public String AgeRestriction { get; set; }
         public String Price { get; set; }
         public Boolean IsFree { get; set; }
-        public String Images { get; set; }
+        public String[] Images { get; set; }
+        public String FirstImage
+        {
+            get
+            {
+                if (Images != null)
+                    if (Images.Count() > 0)
+                        return Images[0].Trim();
+                return "https://cdn1.iconfinder.com/data/icons/delivery-logistics-1/512/Logistics-24-512.png";
+            }
+        }
         public Int32 FavoritesCount { get; set; }
         public Int32 CommentsCount { get; set; }
         public String SiteUrl { get; set; }
         public String Tag { get; set; }
         public String Participants { get; set; }
 
-        public List<String> Tags { get; set; }
+        public List<Tag> Tags { get; set; }
+        public List<Tag> TagsUser { get; set; }
         public List<Comment> Comments { get; set; }
 
-        public EventViewModel(Event ev)
+        public EventViewModel(Event ev, int? userId)
         {
             EventId = ev.EventId;
             Id = ev.Id;
@@ -53,12 +64,16 @@ namespace WeekendPlan.ViewModels
             AgeRestriction = ev.AgeRestriction;
             Price = ev.Price;
             IsFree = ev.IsFree;
-            Images = ev.Images;
+            Images = ev.Images.Split(new char[] { ',' });
             FavoritesCount = ev.FavoritesCount;
             CommentsCount = ev.CommentsCount;
             SiteUrl = ev.SiteUrl;
-            Tag = ev.Tag;
+            Tag = ev.Tags;
             Participants = ev.Participants;
+            Comments = ev.GetComments();
+            Tags = ev.GetTagsCommon();
+            if (!(userId == 0 || userId == null))
+                TagsUser = ev.GetTagsByUser(userId.Value);
         }
     }
 }

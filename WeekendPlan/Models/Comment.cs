@@ -19,11 +19,7 @@ namespace WeekendPlan.Models
         public Int32 UserId { get; set; }
         [Column("parent_id")]
         public Int32? ParentId { get; set; }
-        //[Column("parent_id")]
-        //public Int32 Film { get; set; }
-        //[Column("parent_id")]
-        //public Int32 ParentId { get; set; }
-        
+        public Film Film { get; set; }
         public virtual ICollection<CommentFilm> CommentsFilm { get; set; }
         public UserProfile Author { get; set; }
 
@@ -34,9 +30,14 @@ namespace WeekendPlan.Models
             connector.SaveChanges();
             return c;
         }
-        //public List<Comment> Children { get; set; }
-        //public Comment Parent { get; set; }
 
+        public static Film GetFilmByComment(int id)
+        {
+            DbConnect connector = new DbConnect();
+            Film film = connector.Films.FirstOrDefault(x => x.FilmId == id);
+
+            return film;
+        }
 
     }
 }
