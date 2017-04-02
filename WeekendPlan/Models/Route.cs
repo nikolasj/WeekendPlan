@@ -114,7 +114,7 @@ namespace WeekendPlan.Models
                     }
 
                     var timing = dateTo - dateFrom;
-                    if (timing.Minutes > 60 * 12) timing = TimeSpan.FromMinutes(120);
+                    if (timing.Minutes > 60 * 12) timing = TimeSpan.FromMinutes(Int32.Parse(WebConfigurationManager.AppSettings["DefaultDuration"]));
 
                     Duration += timing.Minutes;
                 }
@@ -126,10 +126,10 @@ namespace WeekendPlan.Models
                     var film = Film.GetFilms().Find(x => x.FilmId == op.CurrentShow.MovieId);
                     if (film != null)
                     {
-                        Duration += String.IsNullOrWhiteSpace(film.RunningTime) ? 120 : Int32.Parse(film.RunningTime);
+                        Duration += String.IsNullOrWhiteSpace(film.RunningTime) ? Int32.Parse(WebConfigurationManager.AppSettings["DefaultDuration"]) : Int32.Parse(film.RunningTime);
                     }
                     else
-                        Duration += 120;
+                        Duration += Int32.Parse(WebConfigurationManager.AppSettings["DefaultDuration"]);
                     }
             }
 

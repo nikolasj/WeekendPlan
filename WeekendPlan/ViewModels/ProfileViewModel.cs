@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using WeekendPlan.Models;
 
 namespace WeekendPlan.ViewModels
@@ -33,7 +34,7 @@ namespace WeekendPlan.ViewModels
         {
             UserId = user.UserId;
             Name = user.Name;
-            Picture = user.Picture;//(user.Picture == null) ? user.Picture = "https://www.anonymousvideo.eu/IMG/siteon0.png?1435050135" : user.Picture;
+            Picture = (user.Picture == null) ? user.Picture = WebConfigurationManager.AppSettings["EmptyUserPicture"] : user.Picture;
             City = user.City;
             DriverLicense = user.DriverLicense;
             Car = user.Car;

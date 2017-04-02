@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using WeekendPlan.Models;
 
@@ -45,7 +46,7 @@ namespace WeekendPlan.ViewModels
                 if (Images != null)
                     if (Images.Count() > 0)
                         return Images[0].Trim();
-                return "https://cdn1.iconfinder.com/data/icons/delivery-logistics-1/512/Logistics-24-512.png";
+                return WebConfigurationManager.AppSettings["EmptyFilmPicture"];
             }
         }
         public String Poster { get; set; }
