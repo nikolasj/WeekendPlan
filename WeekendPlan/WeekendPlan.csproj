@@ -188,6 +188,7 @@
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Film.cs" />
     <Compile Include="Models\Genres.cs" />
+    <Compile Include="Models\Helper.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Opportunity.cs" />

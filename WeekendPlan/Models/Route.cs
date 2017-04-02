@@ -81,18 +81,14 @@ namespace WeekendPlan.Models
 
         private void FillRouteFields()
         {
-            //заполняем поля
             int EventCost = 0;
-            int TransportCost = 0;
-            int TotalCost = 0;
             int Duration = 0;
-            float Rating = 0;
 
             foreach (var op in Opportunities)
             {
                 if (op.CurrentEvent != null)
                 {
-                    EventCost += String.IsNullOrWhiteSpace(op.CurrentEvent.Price) ? 0 : GetPriceAverage(op.CurrentEvent.Price);
+                    EventCost += String.IsNullOrWhiteSpace(op.CurrentEvent.Price) ? 0 : Helper.GetPriceAverage(op.CurrentEvent.Price);
                     DateTime dateTo = DateTime.MaxValue;
                     DateTime dateFrom = DateTime.MinValue;
                     
@@ -122,7 +118,7 @@ namespace WeekendPlan.Models
                 //    EventCost += String.IsNullOrWhiteSpace(op.CurrentPlace.) ? 0 : Int32.Parse(op.CurrentPlace.Price);
                 if (op.CurrentShow != null)
                 {
-                    EventCost += String.IsNullOrWhiteSpace(op.CurrentShow.Price) ? 0 : GetPriceAverage(op.CurrentShow.Price);
+                    EventCost += String.IsNullOrWhiteSpace(op.CurrentShow.Price) ? 0 : Helper.GetPriceAverage(op.CurrentShow.Price);
                     var film = Film.GetFilms().Find(x => x.FilmId == op.CurrentShow.MovieId);
                     if (film != null)
                     {
@@ -137,21 +133,5 @@ namespace WeekendPlan.Models
             this.EventCost = EventCost.ToString();
         }
 
-        int GetPriceAverage(string val)
-        {
-            val = val.Trim();
-            val = val.Replace("  ", " ");
-            var allVals = val.Split(new string[] { "от", "до", "-", " " },StringSplitOptions.RemoveEmptyEntries);
-            List<Int32> vals = new List<int>();
-            foreach(var v in allVals)
-            {
-                int n=0;
-                Int32.TryParse(v, out n);
-                if (n != 0)
-                    vals.Add(n);
-            }
-
-            return (int)vals.Average();
-        }
     }
 }

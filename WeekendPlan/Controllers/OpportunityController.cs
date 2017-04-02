@@ -40,7 +40,7 @@ namespace WeekendPlan.Controllers
                         OpportunityViewModel opportunityVM = new OpportunityViewModel(o);
                         if (o.DateFrom != null)
                         {
-                            date_start_hour = Int32.Parse(Opportunity.ConvertDateStartHourToInt(o.DateFrom.ToString()));
+                            date_start_hour = Int32.Parse(Helper.ConvertDateStartHourToInt(o.DateFrom.ToString()));
                         }
                         if (date_start_hour != 0)
                         {
@@ -91,7 +91,7 @@ namespace WeekendPlan.Controllers
                         RouteViewModel routeVM = new RouteViewModel(r);
                         if (r.RouteDatesFrom != null)
                         {
-                            date_start_hour = Int32.Parse(Opportunity.ConvertDateStartHourToInt(r.RouteDatesFrom.ToString()));
+                            date_start_hour = Int32.Parse(Helper.ConvertDateStartHourToInt(r.RouteDatesFrom.ToString()));
                         }
                         //if (date_start_hour != 0)
                         //{

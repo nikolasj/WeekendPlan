@@ -180,10 +180,5 @@ namespace WeekendPlan.Models
             return result;
         }
 
-        public static String ConvertDateStartHourToInt(String dateStart)
-        {
-            String[] dateVals = dateStart.Split(' ', ':');
-            return dateVals[1];
-        }
     }
 }
