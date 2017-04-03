@@ -53,21 +53,6 @@
         </div>*@
     <br />
     <div class="row" style="margin-top: 40px;">
-        <div class="col-md-3">
-            <form action="~/Opportunity/Opportunities" method="post">
-                <b>Выберите дату:</b><br />
-                <input id="Date" type="datetime-local" class="form-control" name="Date" value="@ViewBag.Date" /> @*input id="TaskDataStart" style="display:none;" type="datetime-local" class="form-control" name="TaskDataStart" value="@Model.DateStartStr">*@
-                <b>Выберите город:</b>
-                <p>@Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control" })</p>
-                <b>Выберите тип отдыха:</b>
-                <select class="form-control" id="TypeVacation" name="Priority">
-                    <option value="1" @(Model.TypeVacation == 1 ? "selected" : "")>Активный</option>
-                    <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Пассивный</option>
-                </select>
-                <br />
-                <button class="btn btn-primary" id="Search" type="submit" value="Искать" name="Search">Искать маршрут</button>
-            </form>
-        </div>
         <div class="col-md-6">
             @*style="float:left;"*@
 

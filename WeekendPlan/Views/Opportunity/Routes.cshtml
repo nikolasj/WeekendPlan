@@ -15,7 +15,7 @@
     <div class="row" style="margin-top: 50px;">
         <br />
         <div class="col-md-3">
-            <form action="~/Opportunity/Opportunities" method="post">
+            <form action="~/Opportunity/Routes" method="post">
                 <b>Выберите дату:</b><br />
                 <input id="Date" type="datetime-local" class="form-control" name="Date" value="@ViewBag.Date" /> @*input id="TaskDataStart" style="display:none;" type="datetime-local" class="form-control" name="TaskDataStart" value="@Model.DateStartStr">*@
                 <b>Выберите город:</b>
@@ -32,10 +32,10 @@
         <div class="col-md-6">
             @foreach(var r in Model.Routes)
             {
-                <img src="@r.Opportunities[0].Image"/> 
+                <img width="250" height="200" src="@r.Opportunities[0].Image"/> <br />
                 <b>@r.Name</b><br />
-                <b>@r.EventCost</b><br />
-                <b>@r.Duration</b>
+                <b>Цена: @r.EventCost рублей</b><br />
+                <b>Продолжительность: @r.Duration минут</b>
                 <br />
             }
         </div>

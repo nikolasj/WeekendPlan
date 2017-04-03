@@ -11,8 +11,13 @@ namespace WeekendPlan.Models
         {
             val = val.Trim();
             val = val.Replace("  ", " ");
-            var allVals = val.Split(new string[] { "от", "до", "-", " " }, StringSplitOptions.RemoveEmptyEntries);
+            var allVals = val.Split(new string[] { "от", "до", "-", " ", "руб", "руб.", "рублей", "рублей." }, StringSplitOptions.RemoveEmptyEntries);
             List<Int32> vals = new List<int>();
+            //String[] val2 = val.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+            //if (val2.Length > 1)
+            //{
+            //    allVals = val2;
+            //}
             foreach (var v in allVals)
             {
                 int n = 0;
@@ -21,7 +26,7 @@ namespace WeekendPlan.Models
                     vals.Add(n);
             }
 
-            return (int)vals.Average();
+            return (vals.Count != 0) ? (int)vals.Average() : 0;
         }
 
         public static String ConvertDateStartHourToInt(String dateStart)

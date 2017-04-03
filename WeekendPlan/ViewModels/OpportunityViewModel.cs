@@ -23,6 +23,7 @@ namespace WeekendPlan.ViewModels
         public Int32 EventId { get; set; }
         public Coords Coords { get; set; }
         
+        public String Image { get; set; }
         public List<Category> Categories { get; set; }
         public Place CurrentPlace { get; set; }
         public Show CurrentShow { get; set; }
@@ -41,6 +42,7 @@ namespace WeekendPlan.ViewModels
             Duration = o.Duration;
             Cost = o.Cost;
             PlaceId = o.PlaceId;
+            Image = o.Image;
             if (String.IsNullOrWhiteSpace(o.CoordsStr)) Coords = new Coords() { Lat = "0", Lon = "0" };
             else
             {

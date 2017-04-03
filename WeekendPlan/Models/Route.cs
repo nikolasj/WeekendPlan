@@ -59,14 +59,16 @@ namespace WeekendPlan.Models
             //....
             for (int i = 0; i < count; i++)
             {
-                List<Opportunity> tempOpList = 
-                    Opportunity.GetOpportunitiesByDateForUser(user, date, location, typeVacation, Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]));
+                List<Opportunity> tempOpList =
+                    Opportunity.GetOpportunitiesByDateForUser(user, date, location, typeVacation, 
+                    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), null);
                 tempOpList.AddRange(
-                    Opportunity.GetOpportunitiesByDateForUser(user, date.AddDays(1), location, typeVacation, Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"])));
+                    Opportunity.GetOpportunitiesByDateForUser(user, date.AddDays(1), location, typeVacation, 
+                    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), tempOpList));
                 Route temp = new Route(tempOpList, user.UserId);
                 temp.RouteDatesFrom = date;
                 temp.RouteDatesTo = date.AddDays(1);
-                temp.Name = "Маршрут на " + temp.RouteDatesFrom.ToShortDateString() + "-" + temp.RouteDatesTo.ToShortDateString() + " номер "+(i+1).ToString();
+                temp.Name = "Маршрут на " + temp.RouteDatesFrom.ToShortDateString() + "-" + temp.RouteDatesTo.ToShortDateString() + " номер " + (i + 1).ToString();
 
                 result.Add(temp);
             }
@@ -91,13 +93,13 @@ namespace WeekendPlan.Models
                     EventCost += String.IsNullOrWhiteSpace(op.CurrentEvent.Price) ? 0 : Helper.GetPriceAverage(op.CurrentEvent.Price);
                     DateTime dateTo = DateTime.MaxValue;
                     DateTime dateFrom = DateTime.MinValue;
-                    
+
                     if (!String.IsNullOrWhiteSpace(op.CurrentEvent.DateEnd))
                     {
-                         dateTo = DateTime.Parse(op.CurrentEvent.DateEnd);
+                        dateTo = DateTime.Parse(op.CurrentEvent.DateEnd);
                         if (dateTo.Year == 1) dateTo.AddYears(op.DateTo.Year);
                     }
-                    
+
                     if (!String.IsNullOrWhiteSpace(op.CurrentEvent.DateStart))
                     {
                         dateFrom = DateTime.Parse(op.CurrentEvent.DateStart);
@@ -126,7 +128,7 @@ namespace WeekendPlan.Models
                     }
                     else
                         Duration += Int32.Parse(WebConfigurationManager.AppSettings["DefaultDuration"]);
-                    }
+                }
             }
 
             this.Duration = Duration.ToString();

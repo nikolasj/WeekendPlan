@@ -26,14 +26,19 @@
             enables a clean separation of concerns and gives you full control over markup
             for enjoyable, agile development.
         </p>*@
-        <p><a class="btn btn-default" href="~/Opportunity/Opportunities">Маршруты</a></p>
+        <p><a class="btn btn-default" href="~/Opportunity/Routes">Маршруты</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Варианты маршрутов</h2>
+        @*<p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>*@
+        <p><a class="btn btn-default" href="~/Opportunity/Opportunities">Варианты маршрутов</a></p>
     </div>
     <div class="col-md-4">
         <h2>Мои интересы</h2>
         @if (Model.TagsUser == null)
         {
             <p>Заполните анкету</p>
-                <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Перейти к анкете</a></p>
+            <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Перейти к анкете</a></p>
         }
         else
         {
@@ -42,10 +47,5 @@
                 <a href="~/Search/Search?tag=@t.Text">#@t.Text</a>
             }
         }
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>

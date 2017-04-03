@@ -19,21 +19,21 @@ namespace WeekendPlan.Controllers
                 opportunityLVM.Opportunities = new List<OpportunityViewModel>();
 
                 //-------------------------------
-               
-                ViewBag.Date = (Request.Form["Date"]==null)? DateTime.Now.AddDays(1).ToString("s"): Request.Form["Date"];
+
+                ViewBag.Date = (Request.Form["Date"] == null) ? DateTime.Now.AddDays(1).ToString("s") : Request.Form["Date"];
                 DateTime date = DateTime.Parse(ViewBag.Date);
                 List<City> city = City.GetCities();
                 city.Add(new City() { CityId = 0, Name = "<Нет>" });
                 var cityId = (Request.Form["Cities"] != null) ? Int32.Parse(Request.Form["Cities"]) : user.City;
                 ViewBag.DropDownValuesCities = new SelectList(city, "CityId", "Name", cityId);
-                opportunityLVM.TypeVacation = (Request.Form["TypeVacation"] !=null)?Int32.Parse(Request.Form["TypeVacation"]):1;
+                opportunityLVM.TypeVacation = (Request.Form["TypeVacation"] != null) ? Int32.Parse(Request.Form["TypeVacation"]) : 1;
 
                 //ViewBag.DropDownValuesTypeVacation = new SelectList()
                 //-------------------------------
                 if (Session["user_opportunities"] == null)
                 {
-                    String location = City.GetCities().Find(x => x.CityId==cityId).Slug;
-                    List<Opportunity> opportunity = Opportunity.GetOpportunitiesByDateForUser(user, date, location, opportunityLVM.TypeVacation, 4);
+                    String location = City.GetCities().Find(x => x.CityId == cityId).Slug;
+                    List<Opportunity> opportunity = Opportunity.GetOpportunitiesByDateForUser(user, date, location, opportunityLVM.TypeVacation, 4, null);
                     int date_start_hour = 0;
                     foreach (var o in opportunity)
                     {
@@ -55,8 +55,8 @@ namespace WeekendPlan.Controllers
                 {
                     opportunityLVM = Session["user_opportunities"] as OpportunityListViewModel;
                 }
-                
-                return View("Opportunities",opportunityLVM);
+
+                return View("Opportunities", opportunityLVM);
             }
             return View();
         }
@@ -79,33 +79,27 @@ namespace WeekendPlan.Controllers
                 ViewBag.DropDownValuesCities = new SelectList(city, "CityId", "Name", cityId);
                 routeLVM.TypeVacation = (Request.Form["TypeVacation"] != null) ? Int32.Parse(Request.Form["TypeVacation"]) : 1;
 
-                //ViewBag.DropDownValuesTypeVacation = new SelectList()
                 //-------------------------------
-                if (Session["user_routes"] == null)
-                {
-                    String location = City.GetCities().Find(x => x.CityId == cityId).Slug;
-                    List<Route> routes = Route.GetRoutesByDateForUser(user, date, location, routeLVM.TypeVacation, 1);
-                    int date_start_hour = 0;
-                    foreach (var r in routes)
-                    {
-                        RouteViewModel routeVM = new RouteViewModel(r);
-                        if (r.RouteDatesFrom != null)
-                        {
-                            date_start_hour = Int32.Parse(Helper.ConvertDateStartHourToInt(r.RouteDatesFrom.ToString()));
-                        }
-                        //if (date_start_hour != 0)
-                        //{
-                        //    routeVM.TimeHour = date_start_hour;
-                        //}
-                        routeLVM.Routes.Add(routeVM);
-                    }
 
-                    Session["user_routes"] = routeLVM;
-                }
-                else
+                String location = City.GetCities().Find(x => x.CityId == cityId).Slug;
+                List<Route> routes = Route.GetRoutesByDateForUser(user, date, location, routeLVM.TypeVacation, 1);
+                int date_start_hour = 0;
+                foreach (var r in routes)
                 {
-                    routeLVM = Session["user_routes"] as RouteListViewModel;
+                    RouteViewModel routeVM = new RouteViewModel(r);
+                    if (r.RouteDatesFrom != null)
+                    {
+                        date_start_hour = Int32.Parse(Helper.ConvertDateStartHourToInt(r.RouteDatesFrom.ToString()));
+                    }
+                    //if (date_start_hour != 0)
+                    //{
+                    //    routeVM.TimeHour = date_start_hour;
+                    //}
+                    routeLVM.Routes.Add(routeVM);
                 }
+
+                Session["user_routes"] = routeLVM;
+
 
                 return View("Routes", routeLVM);
             }
@@ -114,14 +108,14 @@ namespace WeekendPlan.Controllers
 
         public ActionResult GetPlaceCoords()
         {
-            List<Coords> result = new List<Coords>();          
+            List<Coords> result = new List<Coords>();
             var opportunityLVM = Session["user_opportunities"] as OpportunityListViewModel;
 
-            foreach(var c in opportunityLVM.Opportunities)
+            foreach (var c in opportunityLVM.Opportunities)
             {
                 if (c.Coords != null)
                 {
-                    if (c.Coords.Lat !=null && c.Coords.Lon != null)
+                    if (c.Coords.Lat != null && c.Coords.Lon != null)
                     {
                         Coords coords = new Coords() { Content = c.Title, Description = c.Description, Lat = c.Coords.Lat, Lon = c.Coords.Lon };
                         result.Add(coords);
@@ -129,7 +123,7 @@ namespace WeekendPlan.Controllers
                 }
             }
 
-           return Json(result, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         //public ActionResult SomeActionMethod()
@@ -151,7 +145,7 @@ namespace WeekendPlan.Controllers
                 if (Session["user_opportunities"] != null)
                 {
                     opportunityLVM = Session["user_opportunities"] as OpportunityListViewModel;
-                    opportunityLVM.Opportunities.Remove(opportunityLVM.Opportunities.Find(x=>x.OpportunityId == id));
+                    opportunityLVM.Opportunities.Remove(opportunityLVM.Opportunities.Find(x => x.OpportunityId == id));
                     Session["user_opportunities"] = opportunityLVM;
                 }
 
