@@ -232,6 +232,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\change_tag.js" />
     <Content Include="Scripts\custom_view.js" />
     <Content Include="Scripts\data.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

@@ -93,7 +93,7 @@ namespace WeekendPlan.Models
                     locationEvents.Add(e);
                 }
             }
-            var tagsByUser = Tag.GetTagsByUser(user.UserId);
+            var tagsByUser = tags;// Tag.GetTagsByUser(user.UserId);
 
             foreach(var e in locationEvents)
             {

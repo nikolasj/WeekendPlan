@@ -10,12 +10,15 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Routes</title>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/change_tag.js"></script>
 </head>
 <body>
     <div class="row" style="margin-top: 50px;">
         <br />
         <div class="col-md-3">
-            <form action="~/Opportunity/Routes" method="post">
+            <form action="~/Opportunity/SearchRoute" method="post">
                 <b>Выберите дату:</b><br />
                 <input id="Date" type="datetime-local" class="form-control" name="Date" value="@ViewBag.Date" /> @*input id="TaskDataStart" style="display:none;" type="datetime-local" class="form-control" name="TaskDataStart" value="@Model.DateStartStr">*@
                 <b>Выберите город:</b>
@@ -26,13 +29,29 @@
                     <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Пассивный</option>
                 </select>
                 <br />
+                <p>Теги:</p>
+                <p id="tagsEdit" style="display:none;">
+                    <textarea type="text" id="inputTags" name="inputTags" rows="4" cols="20" style="margin: 0px; width: 243px; height: 137px;">@String.Join(" ", Model.TagsByUser.Select(x => "#" + x).ToList())</textarea>
+                    <input class="btn btn-primary" id="SaveTags" type="submit" value="save" name="btnSave" />
+                </p>
+                <p id="tagsText">                  
+                    <span id="tagsTextUser">
+                        @foreach (var c in Model.TagsByUser)
+                        {
+                            <a href="~/Search/Search?tag=@c">#@c </a>
+                        }
+                    </span>
+                </p>
+                <span class="btn" onclick="ChangeTag();" id="editTags">Изменить теги</span>
+                <br />
+
                 <button class="btn btn-primary" id="Search" type="submit" value="Искать" name="Search">Искать маршрут</button>
             </form>
         </div>
         <div class="col-md-6">
-            @foreach(var r in Model.Routes)
+            @foreach (var r in Model.Routes)
             {
-                <img width="250" height="200" src="@r.Opportunities[0].Image"/> <br />
+                <img width="250" height="200" src="@r.Opportunities[0].Image" /> <br />
                 <b>@r.Name</b><br />
                 <b>Цена: @r.EventCost рублей</b><br />
                 <b>Продолжительность: @r.Duration минут</b>

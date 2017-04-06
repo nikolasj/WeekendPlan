@@ -16,7 +16,7 @@ namespace WeekendPlan.Models
             //String[] val2 = val.Split(new char[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
             //if (val2.Length > 1)
             //{
-            //    allVals = val2;
+            //    allVals = val2; 300700
             //}
             foreach (var v in allVals)
             {

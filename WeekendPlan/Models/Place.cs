@@ -77,7 +77,7 @@ namespace WeekendPlan.Models
             List<Place> places = connector.Places.Where(x => x.Location == user.Location).ToList();
             List<Place> resultPlaces = new List<Place>();
 
-            var tagsByUser = Tag.GetTagsByUser(user.UserId);
+            var tagsByUser = tags; // Tag.GetTagsByUser(user.UserId);
 
             foreach (var e in places)
             {

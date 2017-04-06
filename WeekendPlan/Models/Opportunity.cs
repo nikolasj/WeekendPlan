@@ -52,14 +52,15 @@ namespace WeekendPlan.Models
         public List<String> Tags { get; set; }
 
         public static List<Opportunity> GetOpportunitiesByDateForUser(UserProfile user, DateTime date, String location,
-            int typeVacation, int count, List<Opportunity> opportunity)
+            int typeVacation, int count, List<Opportunity> opportunity, List<Tag> tags = null, int? price = null,
+            String transport = null, int countPersons = 0, int countEvents = 1, bool allWeather = false)
         {
             List<Opportunity> result = new List<Opportunity>();
 
             //объединение списков вариантов фильмы+ивенты+(рестораны)+"свободные" Opportunity
-            List<Place> places = Place.GetPlacesForOpportunity(date, user,location: location);
-            List<Show> shows = Show.GetShowsForOpportunity(date, user, places, countEvents: count, location: location); //100
-            List<Event> events = Event.GetEventsForOpportunity(date, user, countEvents: count, location: location);
+            List<Place> places = Place.GetPlacesForOpportunity(date, user, tags, location: location);
+            List<Show> shows = Show.GetShowsForOpportunity(date, user, places, tags, countEvents: count, location: location); //100
+            List<Event> events = Event.GetEventsForOpportunity(date, user, tags, countEvents: count, location: location);
             var listEvents = ConvertEventToOpportunity(events); //20
             //MovieId
             List<Opportunity> listShows = ConvertFilmToOpportunity(shows.GroupBy(x => x.MovieId).Select(y => y.First()).ToList());

@@ -53,7 +53,8 @@ namespace WeekendPlan.Models
         }
 
         public static List<Route> GetRoutesByDateForUser(UserProfile user, DateTime date, String location,
-            int typeVacation, int count)
+            int typeVacation, int count, List<Tag> tags = null, int? price = null,
+            String transport = null, int countPersons = 0, int countEvents = 1, bool allWeather = false)
         {
             List<Route> result = new List<Route>();
             //....
@@ -61,14 +62,15 @@ namespace WeekendPlan.Models
             {
                 List<Opportunity> tempOpList =
                     Opportunity.GetOpportunitiesByDateForUser(user, date, location, typeVacation, 
-                    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), null);
-                tempOpList.AddRange(
-                    Opportunity.GetOpportunitiesByDateForUser(user, date.AddDays(1), location, typeVacation, 
-                    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), tempOpList));
+                    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), null, (tags==null) ? Tag.GetTagsByUser(user.UserId):tags);
+                //tempOpList.AddRange(
+                //    Opportunity.GetOpportunitiesByDateForUser(user, date.AddDays(1), location, typeVacation, 
+                //    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), tempOpList));
                 Route temp = new Route(tempOpList, user.UserId);
-                temp.RouteDatesFrom = date;
-                temp.RouteDatesTo = date.AddDays(1);
-                temp.Name = "Маршрут на " + temp.RouteDatesFrom.ToShortDateString() + "-" + temp.RouteDatesTo.ToShortDateString() + " номер " + (i + 1).ToString();
+                temp.RouteDatesFrom = date.Date;
+                temp.RouteDatesTo = date.AddDays(1).AddSeconds(-1);
+                //temp.Name = "Маршрут на " + temp.RouteDatesFrom.ToShortDateString() + "-" + temp.RouteDatesTo.ToShortDateString() + " номер " + (i + 1).ToString();
+                temp.Name = "Маршрут на " + temp.RouteDatesFrom.ToShortDateString();
 
                 result.Add(temp);
             }

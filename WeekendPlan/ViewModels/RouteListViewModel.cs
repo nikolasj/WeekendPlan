@@ -11,5 +11,6 @@ namespace WeekendPlan.ViewModels
         public DateTime Date { get; set; }
         public Int32 TypeVacation { get; set; }
         public Int32 TimeHour { get; set; }
+        public List<String> TagsByUser { get; set; }
     }
 }
