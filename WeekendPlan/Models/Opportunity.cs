@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using WeekendPlan.DataAccessLayer;
 
 namespace WeekendPlan.Models
 {
@@ -37,6 +38,8 @@ namespace WeekendPlan.Models
         public Int32 EventId { get; set; }
         [Column("coords")]
         public String CoordsStr { get; set; }
+        [Column("type_vacation")]
+        public Int32 TypeVacation { get; set; }
 
         [NotMapped]
         public String Image { get; set; }
@@ -190,5 +193,42 @@ namespace WeekendPlan.Models
             return result;
         }
 
+        public static List<Opportunity> GetOpportunitiesForAdministration()
+        {
+            DbConnect connector = new DbConnect();
+            List<Opportunity> opportunities = connector.Opportunities.Where(x=>x.TypeVacation == 2).ToList<Opportunity>();
+
+            return opportunities;
+        }
+
+        public static Opportunity AddOpportunity(Opportunity c)
+        {
+            DbConnect connector = new DbConnect();
+            connector.Opportunities.Add(c);//?
+            connector.SaveChanges();
+            return c;
+        }
+
+        public static Opportunity GetOpportunity(int id)
+        {
+            DbConnect connector = new DbConnect();
+            var c = connector.Opportunities.FirstOrDefault(x=>x.OpportunityId == id);//?
+
+            return c;
+        }
+
+        public static Opportunity UpdateOpportunity(Opportunity opportunity)
+        {
+            DbConnect connector = new DbConnect();
+
+            var update = connector.Opportunities.Find(opportunity.OpportunityId);//?
+            if (update != null)
+            {
+                connector.Entry(update).CurrentValues.SetValues(opportunity);
+                connector.SaveChanges();
+            }
+
+            return update;
+        }
     }
 }

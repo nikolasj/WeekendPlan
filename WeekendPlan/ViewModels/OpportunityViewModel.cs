@@ -31,6 +31,7 @@ namespace WeekendPlan.ViewModels
         public List<Comment> Comments { get; set; }
         public List<String> Tags { get; set; }
         public Int32 TimeHour { get; set; }
+        public Int32 TypeVacation { get; set; }
 
         public OpportunityViewModel(Opportunity o)
         {
@@ -53,6 +54,10 @@ namespace WeekendPlan.ViewModels
             Rating = o.Rating;
             ShowId = o.ShowId;
             EventId = o.EventId;
+            TypeVacation = o.TypeVacation;
         }
+
+        public OpportunityViewModel()
+        { }
     }
 }

@@ -76,6 +76,14 @@ namespace WeekendPlan.Models
             return updateUser;
         }
 
+        public static List<Comment> GetCommentsByUser(int? userId)
+        {
+            DbConnect connector = new DbConnect();
+            List<Comment> сomments = connector.Comments.Where(x => x.UserId == userId).ToList<Comment>();
+            
+            return сomments;
+        }
+
         public static List<Comment> GetCommentsByFilm(int? userId)
         {
             List<Comment> filmComments = new List<Comment>();

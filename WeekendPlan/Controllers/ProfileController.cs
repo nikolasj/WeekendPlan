@@ -28,11 +28,6 @@ namespace WeekendPlan.Controllers
 
                 return View("ProfileView", profileVM);
 
-                //List<Genres> genres = Genres.GetGenres();
-                //genres.Add(new Genres() { GenresId = 0, Name = "<All>" });
-                //ViewBag.DropDownValuesGenre = new SelectList(genres, "name", "name", "<All>");
-
-                //return View("FilmsView", filmLVM);
             }
             return View();
         }
@@ -81,7 +76,7 @@ namespace WeekendPlan.Controllers
             if (user != null)
             {
                 ProfileViewModel profileVM = new ProfileViewModel(user);
-                profileVM.GetCommentsByUser();
+                profileVM.GetCommentsByUser(user.UserId);
                 return View("CommentsByUser", profileVM);
             }
 

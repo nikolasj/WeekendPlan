@@ -151,14 +151,15 @@ namespace WeekendPlan.Controllers
         {
             if (ModelState.IsValid)
             {
-                //UserProdile userProfile = new UserProdile();
+                UserProfile userProfile = new UserProfile();
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    //userProfile.Name = user.Email;
-                    //userProfile.AspNetUserId = user.Id;
-                    //var u = UserProdile.AddUser(userProfile);
+                    userProfile.Name = user.Email;
+                    userProfile.AspNetUserId = user.Id;
+                    var u = UserProfile.AddUser(userProfile);
+                    //await UserManager.AddToRoleAsync(user.Id, "admin");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);                  
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

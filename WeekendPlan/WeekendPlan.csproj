@@ -161,6 +161,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FacebookController.cs" />
@@ -177,6 +178,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AppDbInitializer.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\City.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -204,6 +206,8 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AdministrationListViewModel.cs" />
+    <Compile Include="ViewModels\CommentViewModel.cs" />
     <Compile Include="ViewModels\CoordsViewModel.cs" />
     <Compile Include="ViewModels\EventListViewModel.cs" />
     <Compile Include="ViewModels\EventViewModel.cs" />
@@ -311,6 +315,13 @@
     <Content Include="Views\Questionnaire\Questionnaire.cshtml" />
     <Content Include="Views\Opportunity\Opportunities.cshtml" />
     <Content Include="Views\Opportunity\Routes.cshtml" />
+    <Content Include="Views\Administration\Administration.cshtml" />
+    <Content Include="Views\Administration\AdministrationProfileView.cshtml" />
+    <Content Include="Views\Administration\AdministrationCommentsByUser.cshtml" />
+    <Content Include="Views\Administration\AdministrationUpdateOrDeleteComment.cshtml" />
+    <Content Include="Views\Administration\AdministrationComments.cshtml" />
+    <Content Include="Views\Administration\AdministrationOpportunity.cshtml" />
+    <Content Include="Views\Administration\AdministrationOpportunityUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
