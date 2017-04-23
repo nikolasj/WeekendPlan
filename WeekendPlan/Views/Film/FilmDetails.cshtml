@@ -68,11 +68,11 @@
                 <p>Жанр - <a href="~/Film/GenreFilmsView/@Model.Genres">@Model.Genres</a></p>
                 <p>Описание - @Model.BodyText</p>
                 
-                <p><iframe width="560" height="315" src="@Model.Trailer.Replace("watch?v=","embed/").Replace("http","https")" frameborder="0" allowfullscreen></iframe></p>
+                <p>@*<iframe width="560" height="315" src="@Model.Trailer.Replace("watch?v=","embed/").Replace("http","https")" frameborder="0" allowfullscreen></iframe>*@</p>
             </div>
             
         </div>
-    <div style="margin-top: 30px;">
+    <div>
         <form action="~/Film/FilmTags/@Model.FilmId" method="post">
             <p>Теги:</p>
             <p id="tagsEdit" style="display:none;">
@@ -96,7 +96,7 @@
             <br />
         </form>
     </div>
-    <div style="margin-top: 30px;">
+    <div>
         <form action="~/Film/FilmComments/@Model.FilmId" method="post">
             <p>Комментарии:</p>
             @foreach (var c in Model.Comments)

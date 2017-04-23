@@ -17,7 +17,35 @@ namespace WeekendPlan.Controllers
             {
                 OpportunityListViewModel opportunityLVM = new OpportunityListViewModel();
                 opportunityLVM.Opportunities = new List<OpportunityViewModel>();
+                RouteListViewModel routeLVM = new RouteListViewModel();
+                routeLVM.Routes = new List<RouteViewModel>();
 
+                if (Session["user_routes"] != null)
+                {
+                    routeLVM = Session["user_routes"] as RouteListViewModel;
+
+                    int date_start_hour = 0;
+                    foreach (var oppor in routeLVM.Routes)
+                    {
+                        foreach (var o in oppor.Opportunities)
+                        {
+                            OpportunityViewModel opportunityVM = new OpportunityViewModel(o);
+                            if (o.DateFrom != null)
+                            {
+                                date_start_hour = Int32.Parse(Helper.ConvertDateStartHourToInt(o.DateFrom.ToString()));
+                            }
+                            if (date_start_hour != 0)
+                            {
+                                opportunityVM.TimeHour = date_start_hour;
+                            }
+                            opportunityLVM.Opportunities.Add(opportunityVM);
+                        }
+                    }
+
+                    Session["user_opportunities"] = opportunityLVM;
+
+                    return View("Opportunities", opportunityLVM);
+                }
                 //-------------------------------
 
                 ViewBag.Date = (Request.Form["Date"] == null) ? DateTime.Now.AddDays(1).ToString("s") : Request.Form["Date"];
@@ -86,7 +114,7 @@ namespace WeekendPlan.Controllers
                 String location = City.GetCities().Find(x => x.CityId == cityId).Slug;
                 //DateTime concreteDate, UserProfile user, List<Tag> tags = null, int? price = null,
                 //String location = null, String transport = null, int countPersons = 0, int countEvents = 1, bool allWeather = false)
-                routeLVM = GetRoutesByParameters(routeLVM, user, date, location, tags);
+                // routeLVM = GetRoutesByParameters(routeLVM, user, date, location, tags);
 
                 return View("Routes", routeLVM);
             }
@@ -103,13 +131,20 @@ namespace WeekendPlan.Controllers
 
                 ViewBag.Date = (Request.Form["Date"] == null) ? DateTime.Now.AddDays(1).ToString("s") : Request.Form["Date"];
                 DateTime date = DateTime.Parse(ViewBag.Date);
+                //--City
                 List<City> city = City.GetCities();
                 city.Add(new City() { CityId = 0, Name = "<Нет>" });
                 var cityId = (Request.Form["Cities"] != null) ? Int32.Parse(Request.Form["Cities"]) : user.City;
                 ViewBag.DropDownValuesCities = new SelectList(city, "CityId", "Name", cityId);
+
                 routeLVM.TypeVacation = (Request.Form["TypeVacation"] != null) ? Int32.Parse(Request.Form["TypeVacation"]) : 1;
                 String[] arrayTags = Request.Form["inputTags"].Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
                 List<Tag> newTags = new List<Tag>();
+                //--Transport
+                routeLVM.TypeTransport = (Request.Form["TypeTransport"] != null) ? Int32.Parse(Request.Form["TypeTransport"]) : 1;
+                //--AllWeather
+                //routeLVM.AllWeather
+
                 foreach (String tagValue in arrayTags)
                 {
                     Tag tag = new Tag() { Text = tagValue.Trim(), UserId = user.UserId };
@@ -125,7 +160,8 @@ namespace WeekendPlan.Controllers
             return View();
         }
 
-        private RouteListViewModel GetRoutesByParameters(RouteListViewModel routeLVM, UserProfile user, DateTime date, String location, List<Tag> tags)
+        private RouteListViewModel GetRoutesByParameters(RouteListViewModel routeLVM, UserProfile user, DateTime date, 
+            String location, List<Tag> tags)
         {
             List<Route> routes = Route.GetRoutesByDateForUser(user, date, location, routeLVM.TypeVacation, 1, tags);
             int date_start_hour = 0;
@@ -167,15 +203,6 @@ namespace WeekendPlan.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        //public ActionResult SomeActionMethod()
-        //{
-        //    return Content("hello world!");
-        //}
-
-        //public ActionResult SomeActionMethod()
-        //{
-        //    return Content("hello world!");
-        //}
         public ActionResult MarkOpportunityDelete(int id)
         {
             UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
@@ -195,21 +222,5 @@ namespace WeekendPlan.Controllers
             return View();
         }
 
-        //public ActionResult MarkTaskUndone(int id)
-        //{
-        //    Task t = Task.GetTasks().Find(x => x.Task_id == id);
-        //    UserProfile u = UserProfile.GetUsers().Find(x => x.UserName.ToLower() == User.Identity.Name.ToLower());
-
-        //    if (Done.GetTodayDone().Where(x => x.Task_id == id && x.User_id == u.UserId) != null)
-        //    {
-        //        Done task = Done.GetTodayDone().Where(x => x.Task_id == id && x.User_id == u.UserId).Last();
-        //        if (task != null)
-        //        {
-        //            Done.DeleteDone(task);
-        //        }
-        //    }
-        //    return TaskCalendar();
-
-        //}
     }
 }

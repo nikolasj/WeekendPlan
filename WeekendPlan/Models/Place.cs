@@ -43,14 +43,18 @@ namespace WeekendPlan.Models
         public String ForeignUrl { get; set; }
         [Column("coords")]
         public String CoordsStr { get; set; }
-        public Coords Coords { get {
+        public Coords Coords
+        {
+            get
+            {
                 if (String.IsNullOrWhiteSpace(this.CoordsStr)) return new Coords() { Lat = "0", Lon = "0" };
                 else
                 {
                     var arr = CoordsStr.Split(new char[] { ';' });
-                    return new Coords() { Lat = arr[0], Lon = arr[1]};
+                    return new Coords() { Lat = arr[0], Lon = arr[1] };
                 }
-            } }
+            }
+        }
         [Column("subway")]
         public String Subway { get; set; }
         [Column("favorites_count")]
@@ -65,13 +69,15 @@ namespace WeekendPlan.Models
         public String TagsKudaGo { get; set; }
         [Column("city_id")]
         public Int32 CityId { get; set; }
+        [Column("type_vacation")]
+        public Int32 TypeVacation { get; set; }
 
         public List<City> Cities { get; set; }
         public List<Comment> Comments { get; set; }
         public List<Tag> Tags { get; set; }
 
         public static List<Place> GetPlacesForOpportunity(DateTime concreteDate, UserProfile user, List<Tag> tags = null, int? price = null,
-            String location = null, String transport = null, int countPersons = 0, bool allWeather = false)
+            String location = null, String transport = null, int countPersons = 0, bool allWeather = false, int typeVacation = 1)
         {
             DbConnect connector = new DbConnect();
             List<Place> places = connector.Places.Where(x => x.Location == user.Location).ToList();
@@ -81,15 +87,24 @@ namespace WeekendPlan.Models
 
             foreach (var e in places)
             {
-                foreach (var t in tagsByUser)
+                if (tags != null)
                 {
-                    if (e.TagsKudaGo.Contains(t.Text) && !resultPlaces.Any(x => x.PlaceId == e.PlaceId))
+                    foreach (var t in tagsByUser)
                     {
-                        resultPlaces.Add(e);
+                        if (e.TagsKudaGo.Contains(t.Text) && !resultPlaces.Any(x => x.PlaceId == e.PlaceId))
+                        {
+                            resultPlaces.Add(e);
+                        }
                     }
                 }
             }
-
+            if (resultPlaces.Count < 3)
+            {
+                foreach (var e in places)
+                {
+                    resultPlaces.Add(e);
+                }
+            }
             return resultPlaces.ToList();
         }
 
@@ -104,7 +119,7 @@ namespace WeekendPlan.Models
         public static Place GetPlaceById(int id)
         {
             DbConnect connector = new DbConnect();
-            Place place = connector.Places.Where(x=>x.Id == id).FirstOrDefault();
+            Place place = connector.Places.Where(x => x.Id == id).FirstOrDefault();
 
             return place;
         }
@@ -136,8 +151,8 @@ namespace WeekendPlan.Models
             List<TagPlace> tagsPlaceById = connector.TagPlaces.Where(x => x.PlaceId == this.PlaceId).ToList<TagPlace>();
             foreach (var c in tagsPlaceById)
             {
-                var comment = connector.Tags.FirstOrDefault(x => x.TagId == c.TagId && (x.UserId==null||x.UserId==0));
-// var userId = comment.UserId;
+                var comment = connector.Tags.FirstOrDefault(x => x.TagId == c.TagId && (x.UserId == null || x.UserId == 0));
+                // var userId = comment.UserId;
                 //comment.Author = connector.Users.FirstOrDefault(y => y.UserId == userId);
 
                 if (comment != null)
@@ -157,7 +172,7 @@ namespace WeekendPlan.Models
             foreach (var c in tagsPlaceById)
             {
                 var comment = connector.Tags.FirstOrDefault(x => x.TagId == c.TagId && x.UserId == userId);
-              
+
                 if (comment != null)
                 {
                     placeTags.Add(comment);

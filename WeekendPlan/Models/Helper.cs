@@ -34,5 +34,16 @@ namespace WeekendPlan.Models
             String[] dateVals = dateStart.Split(' ', ':');
             return dateVals[1];
         }
+
+        public static int GetTypeVacationByOpportunity(Opportunity opportunity)
+        {
+            var activity = new string[] { "парк", "скалодром", "спортивный", "велосипед", "марафон", "вечеринки", "потанцевать", "пешеходные" };
+            foreach (var v in activity)
+                if (opportunity.Description.ToLower().Contains(v.ToLower()) ||
+                    opportunity.Title.ToLower().Contains(v.ToLower()) ||
+                    opportunity.Tags.Contains(v.ToLower()))
+                    return 1;
+            return 2;
+        }
     }
 }

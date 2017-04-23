@@ -92,12 +92,23 @@ namespace WeekendPlan.Models
             var tagsByUser = tags; //Tag.GetTagsByUser(user.UserId);
             foreach (var tf in tagFilms)
             {
-                foreach (var t in tagsByUser)
+                if (tagsByUser != null)
                 {
-                    if (tf.TagId == t.TagId)
+                    foreach (var t in tagsByUser)
                     {
-                        resultFilmsByTag.Add(tf.FilmId);
+                        if (tf.TagId == t.TagId)
+                        {
+                            resultFilmsByTag.Add(tf.FilmId);
+                        }
                     }
+                }
+            }
+
+            if (resultFilmsByTag.Count < 3)
+            {
+                foreach (var tf in tagFilms)
+                {
+                    resultFilmsByTag.Add(tf.FilmId);
                 }
             }
 

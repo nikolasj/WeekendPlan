@@ -70,28 +70,16 @@ namespace WeekendPlan.Models
             var listPlaces = ConvertPlaceToOpportunity(places);
 
             if (count < 2) count = 2;
-
-            //if (opportunity != null)
-            //{
-            //    List<Opportunity> tempResult = new List<Opportunity>();
-            //    List<Opportunity> tempOpportunity = new List<Opportunity>();
-            //    tempResult.AddRange(listEvents);
-            //    tempResult.AddRange(listShows);
-            //    foreach (Opportunity o in opportunity)
-            //    {
-            //        tempOpportunity.Add(tempResult.Find(x=>x.Title != o.Title));
-            //    }
-            //    if (tempResult != null)
-            //    {
-            //        result.AddRange(tempResult.Take(count / 2));
-            //    }   
-            //}
-
-            result.AddRange(listEvents.Take(count / 2));
-            result.AddRange(listShows.Take(count / 2));
-
+            
+            result.AddRange(listEvents.Where(x =>x.TypeVacation == typeVacation));
+            result.AddRange(listShows.Where(x => x.TypeVacation == typeVacation));
+       
             //generate fake id's
-
+            
+            //foreach(var o in result)
+            //{
+            //    He
+            //}
 
             for (int i = 0; i < result.Count; i++)
             {
@@ -110,6 +98,8 @@ namespace WeekendPlan.Models
             {
                 if (result.Count == 0)
                 {
+                    var film = Film.GetFilms().Find(x => x.Id == e.MovieId);
+
                     Opportunity opportunity = new Opportunity();
                     opportunity.Title = e.FilmName;
                     opportunity.Description = e.Description;
@@ -117,9 +107,11 @@ namespace WeekendPlan.Models
                     opportunity.ShowId = e.ShowId;
                     var place = Place.GetPlaceById(e.PlaceId);
                     opportunity.CoordsStr = place.CoordsStr;
-                    opportunity.Image = (Film.GetFilms().Find(x => x.Id == e.MovieId).Images.Any())? Film.GetFilms().Find(x => x.Id == e.MovieId).Images.ToString():"";
+                    opportunity.Image = (film.Images.Any())? film.Images.ToString():"";
                     //opportunity.OpportunityId = e.F
                     opportunity.CurrentShow = e;// new Show(e);
+                    opportunity.TypeVacation = 2;
+                    opportunity.Tags = film.Tags.Select(x => x.Text).ToList();
                     result.Add(opportunity);
                     continue;
                 }
@@ -132,6 +124,7 @@ namespace WeekendPlan.Models
                     opportunity.ShowId = e.ShowId;
                     opportunity.CoordsStr = Place.GetPlaceById(e.PlaceId).CoordsStr;
                     opportunity.CurrentShow = e;// new Show(e);
+                    opportunity.TypeVacation = 2;
                     if (!result.Any(x => x.DateFrom.Hour == e.Datetime.Hour))
                         result.Add(opportunity);
                 }
@@ -160,9 +153,7 @@ namespace WeekendPlan.Models
             List<Opportunity> result = new List<Opportunity>();
             //var ev = events.GroupBy(x => DateTime.Parse(x.DateStart).Hour).Select(y => y.First()).ToList();
             foreach (var e in events)
-            {
-                if (result.Count == 0)
-                {
+            {               
                     Opportunity opportunity = new Opportunity();
                     opportunity.Title = e.Title;
                     opportunity.Description = e.Description;
@@ -172,8 +163,10 @@ namespace WeekendPlan.Models
                     opportunity.CoordsStr = Place.GetPlaceById(e.Place).CoordsStr;
                     opportunity.Image = (e.Images.Any())? e.Images.ToString():"";
                     opportunity.CurrentEvent = new Event(e);
+                    opportunity.Tags = e.Tags.Split(new string[] { ", " },StringSplitOptions.RemoveEmptyEntries).ToList();
+                    opportunity.TypeVacation = Helper.GetTypeVacationByOpportunity(opportunity);
                     result.Add(opportunity);                 
-                }
+                //}
 
                 //foreach (var i in events)
                 //{
