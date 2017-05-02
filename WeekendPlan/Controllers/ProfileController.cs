@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WeekendPlan.Models;
@@ -11,6 +12,7 @@ namespace WeekendPlan.Controllers
 {
     public class ProfileController : Controller
     {
+        [Authorize]
         public ActionResult ProfileView()
         {
             UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
@@ -32,6 +34,7 @@ namespace WeekendPlan.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult ChangeProfile(FormCollection formValues, int id)
         {
@@ -41,23 +44,35 @@ namespace WeekendPlan.Controllers
             user.Name = Request.Form["UserName"];
             City c = City.GetCities().Find(x => x.CityId == Int32.Parse(Request.Form["Cities"]));
             user.City = c.CityId;
-            if (Request.Form["UserCar"] != null)
-            {
-                user.Car = (Request.Form["UserCar"] == "on") ? true : false;
-            }
-            else
-                user.Car = false;
+            //if (Request.Form["UserCar"] != null)
+            //{
+            //    user.Car = (Request.Form["UserCar"] == "on") ? true : false;
+            //}
+            //else
+            //    user.Car = false;
             user.Picture = (Request.Form["files"] == "") ? user.Picture : Request.Form["files"];
-            if (Request.Form["UserDriverLicense"] != null)
-            {
-                user.DriverLicense = (Request.Form["UserDriverLicense"] == "on") ? true : false;
-            }
-            else
-                user.DriverLicense = false;
+            //if (Request.Form["UserDriverLicense"] != null)
+            //{
+            //    user.DriverLicense = (Request.Form["UserDriverLicense"] == "on") ? true : false;
+            //}
+            //else
+            //    user.DriverLicense = false;
 
-            var uploads = Path.Combine(Server.MapPath("~/"), "Content\\Images\\UserPicture");
+            var uploads = Path.Combine(Server.MapPath("~/"), "Content\\Images\\UserPicture" + user.Picture);
 
-            user.GroupCount = Int32.Parse(Request.Form["GroupCount"]);
+            //foreach (var file in files)
+            //{
+            //    if (file.Length > 0)
+            //    {
+            //        using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+            //        {
+            //            file.CopyTo(fileStream);
+            //            ResultModel rm1 = pageServices.SavePageImage(rm.ID, file.FileName);
+            //            result += " | " + rm.message;
+            //        }
+            //    }
+            //}
+            //user.GroupCount = Int32.Parse(Request.Form["GroupCount"]);
 
             var userProfile = UserProfile.UpdateUser(user);
             List<City> city = City.GetCities();
@@ -66,10 +81,12 @@ namespace WeekendPlan.Controllers
             ViewBag.DropDownValuesCities = new SelectList(city, "CityId", "Name", c.CityId);
             ProfileViewModel profileVM = new ProfileViewModel(userProfile);
             profileVM.webRoot = Server.MapPath("~/");
+            profileVM.GetTagsByUser();
             return View("ProfileView", profileVM);
 
         }
 
+        [Authorize]
         public ActionResult CommentsByUser()
         {
             UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
@@ -83,6 +100,7 @@ namespace WeekendPlan.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult TagsByUser()
         {
             UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
@@ -96,6 +114,7 @@ namespace WeekendPlan.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult UsersView()
         {
             UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
@@ -117,6 +136,7 @@ namespace WeekendPlan.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Relatives(int id)
         {
             var user = UserProfile.GetUser(id);

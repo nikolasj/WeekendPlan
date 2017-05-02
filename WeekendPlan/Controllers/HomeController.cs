@@ -30,13 +30,16 @@ namespace WeekendPlan.Controllers
             if (user != null)
             {
                 var userTags = Tag.GetTagsByUser(user.UserId);
+                
                 if (userTags != null)
                 {
                     indexLVM.TagsUser = userTags;
                 }
-
+                indexLVM.User = user;
                 return View("Index", indexLVM);
             }
+            indexLVM.User = user;
+
             return View("Index", indexLVM);
         }
 

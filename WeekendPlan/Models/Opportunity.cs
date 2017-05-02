@@ -40,6 +40,8 @@ namespace WeekendPlan.Models
         public String CoordsStr { get; set; }
         [Column("type_vacation")]
         public Int32 TypeVacation { get; set; }
+        [Column("route_id")]
+        public Int32 RouteId { get; set; }
 
         [NotMapped]
         public String Image { get; set; }
@@ -73,20 +75,31 @@ namespace WeekendPlan.Models
             
             result.AddRange(listEvents.Where(x =>x.TypeVacation == typeVacation));
             result.AddRange(listShows.Where(x => x.TypeVacation == typeVacation));
-       
+
             //generate fake id's
-            
+
             //foreach(var o in result)
             //{
             //    He
             //}
+            List<Opportunity> resultopportunity = new List<Opportunity>();
 
             for (int i = 0; i < result.Count; i++)
             {
                 result[i].OpportunityId = i;
+                //if (result[i].DateFrom.Hour - resultopportunity[0].DateFrom.Hour >= 2 || resultopportunity[0].DateFrom.Hour - result[i].DateFrom.Hour >= 2)
+                //{
+                //    resultopportunity.Add(result[i]);
+                //}
+            }
+            var r = result.Select(x => x.DateFrom.Hour + 2).Distinct().ToList();
+
+            foreach(var res in r)
+            {
+                resultopportunity.Add(result.FirstOrDefault(x => x.DateFrom.Hour == res - 2));
             }
 
-            return result;//.Take(count).ToList();
+            return resultopportunity;//.Take(count).ToList();
         }
 
         private static List<Opportunity> ConvertFilmToOpportunity(List<Show> shows)
@@ -111,23 +124,24 @@ namespace WeekendPlan.Models
                     //opportunity.OpportunityId = e.F
                     opportunity.CurrentShow = e;// new Show(e);
                     opportunity.TypeVacation = 2;
-                    opportunity.Tags = film.Tags.Select(x => x.Text).ToList();
+
+                    opportunity.Tags = (film.Tags != null) ? film.Tags.Select(x => x.Text).ToList(): null;
                     result.Add(opportunity);
-                    continue;
+                    //continue;
                 }
-                if (e.Datetime.Hour - result[0].DateFrom.Hour >= 2 || result[0].DateFrom.Hour - e.Datetime.Hour >= 2)
-                {
-                    Opportunity opportunity = new Opportunity();
-                    opportunity.Title = e.FilmName;
-                    opportunity.Description = e.Description;
-                    opportunity.DateFrom = e.Datetime;
-                    opportunity.ShowId = e.ShowId;
-                    opportunity.CoordsStr = Place.GetPlaceById(e.PlaceId).CoordsStr;
-                    opportunity.CurrentShow = e;// new Show(e);
-                    opportunity.TypeVacation = 2;
-                    if (!result.Any(x => x.DateFrom.Hour == e.Datetime.Hour))
-                        result.Add(opportunity);
-                }
+                //if (e.Datetime.Hour - result[0].DateFrom.Hour >= 2 || result[0].DateFrom.Hour - e.Datetime.Hour >= 2)
+                //{
+                //    Opportunity opportunity = new Opportunity();
+                //    opportunity.Title = e.FilmName;
+                //    opportunity.Description = e.Description;
+                //    opportunity.DateFrom = e.Datetime;
+                //    opportunity.ShowId = e.ShowId;
+                //    opportunity.CoordsStr = Place.GetPlaceById(e.PlaceId).CoordsStr;
+                //    opportunity.CurrentShow = e;// new Show(e);
+                //    opportunity.TypeVacation = 2;
+                //    if (!result.Any(x => x.DateFrom.Hour == e.Datetime.Hour))
+                //        result.Add(opportunity);
+                //}
             }
             return result;
         }
@@ -160,29 +174,29 @@ namespace WeekendPlan.Models
                     opportunity.DateFrom = DateTime.Parse(e.DateStart);
                     opportunity.DateTo = DateTime.Parse(e.DateEnd);
                     opportunity.EventId = e.EventId;
-                    opportunity.CoordsStr = Place.GetPlaceById(e.Place).CoordsStr;
+                    opportunity.CoordsStr = (Place.GetPlaceById(e.Place) == null) ? "" : Place.GetPlaceById(e.Place).CoordsStr;
                     opportunity.Image = (e.Images.Any())? e.Images.ToString():"";
                     opportunity.CurrentEvent = new Event(e);
                     opportunity.Tags = e.Tags.Split(new string[] { ", " },StringSplitOptions.RemoveEmptyEntries).ToList();
                     opportunity.TypeVacation = Helper.GetTypeVacationByOpportunity(opportunity);
-                    result.Add(opportunity);                 
-                //}
-
-                //foreach (var i in events)
-                //{
-                //    if (DateTime.Parse(i.DateStart).Hour - result[0].DateFrom.Hour >= 2 || result[0].DateFrom.Hour - DateTime.Parse(i.DateStart).Hour >= 2)
-                //    {
-                //        Opportunity opportunity = new Opportunity();
-                //        opportunity.Title = i.Title;
-                //        opportunity.Description = i.Description;
-                //        opportunity.DateFrom = DateTime.Parse(i.DateStart);
-                //        opportunity.DateTo = DateTime.Parse(i.DateEnd);
-                //        opportunity.EventId = i.EventId;
-                //        opportunity.CoordsStr = Place.GetPlaceById(e.Place).CoordsStr;
-                //        result.Add(opportunity);
-                //    }
-                //}
+                    result.Add(opportunity);
             }
+
+            //foreach (var i in events)
+            //{
+            //    if (DateTime.Parse(i.DateStart).Hour - result[0].DateFrom.Hour >= 2 || result[0].DateFrom.Hour - DateTime.Parse(i.DateStart).Hour >= 2)
+            //    {
+            //        Opportunity opportunity = new Opportunity();
+            //        opportunity.Title = i.Title;
+            //        opportunity.Description = i.Description;
+            //        opportunity.DateFrom = DateTime.Parse(i.DateStart);
+            //        opportunity.DateTo = DateTime.Parse(i.DateEnd);
+            //        opportunity.EventId = i.EventId;
+            //        opportunity.CoordsStr = (Place.GetPlaceById(i.Place) == null) ? "" : Place.GetPlaceById(i.Place).CoordsStr;
+            //        result.Add(opportunity);
+            //    }
+            //}
+
             return result;
         }
 
@@ -200,6 +214,22 @@ namespace WeekendPlan.Models
             connector.Opportunities.Add(c);//?
             connector.SaveChanges();
             return c;
+        }
+
+        public static int SaveOpportunityByRouteId(Opportunity o)
+        {
+            if (o.DateFrom == DateTime.MinValue)
+            {
+                o.DateFrom = DateTime.Now.AddDays(+1);
+            }
+            if (o.DateTo == DateTime.MinValue)
+            {
+                o.DateTo = DateTime.Now.AddYears(+1);
+            }
+            DbConnect connector = new DbConnect();
+            connector.Opportunities.Add(o);//?
+            connector.SaveChanges();
+            return o.OpportunityId;
         }
 
         public static Opportunity GetOpportunity(int id)

@@ -30,6 +30,7 @@ namespace WeekendPlan.ViewModels
         public List<Tag> FilmTags { get; set; }
         public string webRoot { get; set; }
         public Int32? GroupCount { get; set; }
+        public List<Route> RoutesByUser {get;set;}
 
         public ProfileViewModel(UserProfile user)
         {
@@ -41,6 +42,7 @@ namespace WeekendPlan.ViewModels
             Car = user.Car;
             AspNetUserId = user.AspNetUserId;
             GroupCount = user.GroupCount;
+            RoutesByUser = Route.GetRoutesByUser(user);
         }
 
         public void GetCommentsByUser(int UserId)

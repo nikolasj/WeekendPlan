@@ -10,6 +10,7 @@ namespace WeekendPlan.Controllers
 {
     public class SearchController : Controller
     {
+        [Authorize]
         public ActionResult Search(string tag, string type, string text, string page)
         {
             SearchListViewModel searchLVM = new SearchListViewModel();
@@ -156,6 +157,7 @@ namespace WeekendPlan.Controllers
 
         SearchListViewModel FilterEventsByPageId(SearchListViewModel searchLVM, int id)
         {
+            UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
             var pageEvents = new List<EventViewModel>();
             int count = 0;
             int idFinish = id + 5;

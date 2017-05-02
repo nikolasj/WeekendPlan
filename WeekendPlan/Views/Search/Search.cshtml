@@ -51,7 +51,7 @@
             if (Model.Films.Count > 0)
             {
                 <div class="row">
-                    
+
                     <b>Фильмы:</b>
                     <br />
                     <div class="col-md-4">
@@ -158,7 +158,7 @@
             {
                 <div class="row">
                     <div class="col-md-4">
-                        
+
                         <b>События:</b>
                         <br />
                         @{ int ii = 0;
@@ -169,7 +169,7 @@
                                 {
                                     <img class="img-rounded" width="200" src="@e.FirstImage" />
                                     <br />
-                                    <a class="btn btn-primary" href="~/Event/EventDetails/@e.EventId">@e.Title</a>
+                                    <a href="~/Event/EventDetails/@e.EventId">@e.Title</a>
                                     <br />
                                     if (ii > 5)
                                     {
@@ -215,7 +215,7 @@
                                 {
                                     <img class="img-rounded" width="200" src="@e.FirstImage" />
                                     <br />
-                                    <a class="btn btn-primary" href="~/Event/EventDetails/@e.EventId">@e.Title</a>
+                                    <a href="~/Event/EventDetails/@e.EventId">@e.Title</a>
                                     <br />
                                     if (iil > 5)
                                     {
@@ -235,17 +235,24 @@
                         <div>
                             <p>
                                 Тэги:
-                                @foreach (var t in Model.Tags)
-                                {
-                                    
-                                    <a href="~/Search/Search?tag=@t.Text&type=event">#@t.Text</a>
-                                }
+                                @{
+                                    int i = 0;
+                                    foreach (var t in Model.Tags)
+                                    {
+                                        if (i > 40)
+                                        {
+                                            break;
+                                        }
+                                        i++;
 
+                                        <a href="~/Search/Search?tag=@t.Text&type=event">#@t.Text</a>
+                                    }
+                                }
                             </p>
                         </div>
                     </div>
                 </div>
-                            }
+                                    }
         }
         @* Places *@
         @{
@@ -253,7 +260,7 @@
             {
                 <div class="row">
                     <div class="col-md-4">
-                        
+
                         <b>Места:</b>
                         <br />
                         @{ int iii = 0;

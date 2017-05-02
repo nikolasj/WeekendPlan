@@ -37,6 +37,7 @@ namespace WeekendPlan.DataAccessLayer
         public DbSet<Question> Questions { get; set; }
         public DbSet<Show> Shows { get; set; }
         public DbSet<Opportunity> Opportunities { get; set; }
+        public DbSet<Route> Routes { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -57,6 +58,7 @@ namespace WeekendPlan.DataAccessLayer
             modelBuilder.Entity<Question>().ToTable("Question");
             modelBuilder.Entity<Show>().ToTable("Show");
             modelBuilder.Entity<Opportunity>().ToTable("Opportunity");
+            modelBuilder.Entity<Route>().ToTable("Route");
 
             base.OnModelCreating(modelBuilder);
         }

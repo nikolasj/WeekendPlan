@@ -32,7 +32,7 @@
             <div class="col-md-5">
                 <p>Имя: <input class="form-control" id="UserName" type="text" name="UserName" value="@Model.Name" /></p>
                 <p>Город: @Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control"})</p>
-                <p>Права:
+                @*<p>Права:
                     @if (Model.DriverLicense == true)
                     {
                         <input id="UserDriverLicense" type="checkbox" name="UserDriverLicense" checked="checked" />
@@ -41,19 +41,19 @@
                     {
                         <input id="UserDriverLicense" type="checkbox" name="UserDriverLicense" />
                     }
-                </p>
-                <p>Машина: 
+                </p>*@
+                @*<p>Машина: 
        @if (Model.Car==true)
        {
             <input id="UserCar" type="checkbox" name="UserCar" checked="checked" />
-       }
-       else
+       }*@
+       @*else
        {
             <input id="UserCar" type="checkbox" name="UserCar"/>
-       }
+       }*@
                 </p>
                 <p>
-                    Количество попутчиков:  
+                    @*Количество попутчиков:  
                     <select id="GroupCount" name="GroupCount">
                         @for (int i = 1; i <= 10; i++)
                         {
@@ -66,7 +66,7 @@
                                 <option value="@i">@i</option>
                             }
                         }
-                    </select>
+                    </select>*@
                 </p>
 
 
@@ -76,13 +76,24 @@
             </div>
             <div class="col-md-3">
                 <a class="btn btn-default" href="~/Profile/CommentsByUser">Комментарии</a><br />
-                <a class="btn btn-default" href="~/Profile/UsersView">Родственники</a>
+                @*<a class="btn btn-default" href="~/Profile/UsersView">Родственники</a>*@
                 <p>Тэги: 
                 @foreach(var t in Model.Tags)
                 {
                     <a href="~/Search/Search?tag=@t.Text">#@t.Text</a>
                 }
                 </p>
+                <p>Маршруты:
+                @foreach(var r in Model.RoutesByUser)
+                {
+                    <a>@r.Name</a>
+                }
+                </p>
+                    @if (Model.UserId != null)
+                    {
+                            @*<p>Заполните анкету</p>*@
+                            <p><a class="btn btn-default" href="~/Questionnaire/Questionnaire?questionId=1">Перейти к анкете</a></p>
+                    }
             </div>
         </div>
     </form>

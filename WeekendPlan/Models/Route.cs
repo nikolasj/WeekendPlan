@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
+using WeekendPlan.DataAccessLayer;
 
 namespace WeekendPlan.Models
 {
@@ -26,7 +27,7 @@ namespace WeekendPlan.Models
         [Column("rating")]
         public String Rating { get; set; }
         [Column("user_id")]
-        internal Int32 UserId { get; set; }
+        public Int32 UserId { get; set; }
         [Column("route_dates_to")]
         public DateTime RouteDatesTo { get; set; }
         [Column("route_dates_from")]
@@ -36,6 +37,11 @@ namespace WeekendPlan.Models
         public List<Opportunity> Opportunities { get; set; }
         public List<Comment> Comments { get; set; }
         public List<String> Tags { get; set; }
+
+        public Route ()
+        {
+
+        }
 
         public Route(List<Opportunity> list, int userId)
         {
@@ -137,5 +143,21 @@ namespace WeekendPlan.Models
             this.EventCost = EventCost.ToString();
         }
 
+        public static List<Route> GetRoutesByUser(UserProfile user)
+        {
+            DbConnect connector = new DbConnect();
+            List<Route> route = connector.Routes.Where(x => x.UserId == user.UserId).ToList();
+
+            return route;
+        }
+
+        public static int SaveRouteByUser(Route route)
+        {
+
+            DbConnect connector = new DbConnect();
+            connector.Routes.Add(route);//?
+            connector.SaveChanges();
+            return route.RouteId;
+        }
     }
 }

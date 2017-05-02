@@ -69,7 +69,7 @@
                         <a href="#" style="text-decoration: none;" title="Изменить задачу!">@t.Title</a>
                         @*<div style=" display:inline-block">(@t.DateTo.ToShortDateString())</div>*@
                         @*<input id="CheckboxDone_@t.OpportunityId" type="checkbox" data-target="~/Opportunity/MarkOpportunityDone/@t.OpportunityId" />*@
-                        <a href="~/Opportunity/MarkOpportunityDelete/@t.OpportunityId"><img src="https://www.0629.com.ua/design/img/cross-gr.png" /></a>
+                        <a href="~/Opportunity/MarkOpportunityDelete/@t.OpportunityId" title="удалить"><img src="https://www.0629.com.ua/design/img/cross-gr.png" /></a>
                     </div>
                     flagTime = false;
                 }
@@ -104,6 +104,11 @@
 <br />
 <details style="width: 370px; height: 300px; margin-left: 481px;">
     <div id="viewContainer" style="width: 370px; height: 300px;" class="col-md-3"></div>
+</details>
+<details style="width: 370px; height: 300px; margin-left: 481px;">
+        <div style="width: 370px; height: 300px;" class="col-md-3">
+            
+        </div>
 </details>
 </body>
 </html>

@@ -52,6 +52,27 @@ namespace WeekendPlan.ViewModels
             Id = ev.Id;
             PublicationDate = ev.PublicationDate;
             //Dates = ev.Dates;
+            //string[] tempTitle = ev.Title.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            //string title = "";
+            //if (tempTitle.Length > 4)
+            //{
+            //    for( int i = 0; i< tempTitle.Length; i++)
+            //    {
+            //        if(i==4)
+            //        {
+            //            title += tempTitle[i] + " \n ";
+            //        }
+            //        else
+            //        {
+            //            title += tempTitle[i] + " ";
+            //        }
+            //    }
+                
+            //}
+            //else
+            //{
+            //    title = ev.Title;
+            //}
             Title = ev.Title;
             ShortTitle = ev.ShortTitle;
             Slug = ev.Slug;

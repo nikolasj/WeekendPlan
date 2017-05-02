@@ -42,7 +42,9 @@
                     </select><br />*@
                 <p>Теги:</p>
                 <p id="tagsEdit" style="display:none;">
-                    <textarea type="text" id="inputTags" name="inputTags" rows="4" cols="20" style="margin: 0px; width: 243px; height: 137px;">@String.Join(" ", Model.TagsByUser.Select(x => "#" + x).ToList())</textarea>
+                    <textarea type="text" id="inputTags" name="inputTags" rows="4" cols="20" style="margin: 0px; width: 243px; height: 137px;">
+                        @String.Join(" ", Model.TagsByUser.Select(x => "#" + x).ToList())
+                    </textarea>
                     <input class="btn btn-primary" id="SaveTags" type="submit" value="save" name="btnSave" />
                 </p>
                 <p id="tagsText">
@@ -56,25 +58,32 @@
                 <span class="btn" onclick="ChangeTag();" id="editTags">Изменить теги</span>
                 <br />
 
-                <button class="btn btn-primary" id="Search" type="submit" value="Искать" name="Search">Искать маршрут</button>
+                <button class="btn btn-primary" id="Search" type="submit" value="Search" name="btn">Искать маршрут</button>
+                <button class="btn btn-primary" id="Search" type="submit" value="SaveRoute" name="btn">Сохранить маршрут</button>
             </form>
+
         </div>
         <div class="col-md-6">
-            @if (Model.Routes.Count != 0) {
+            @if (Model.Routes.Count != 0)
+            {
                 foreach (var r in Model.Routes)
                 {
                     if (r.Opportunities.Count != 0)
                     {
-                    <img width="250" height="200" src="@r.Opportunities[0].Image" /> <br />
-                    <b><a href="~/Opportunity/Opportunities">@r.Name</a></b><br />
-                    <b>Цена: @r.EventCost рублей</b><br />
-                    <b>Продолжительность: @r.Duration минут</b>
-                    <br />
+                        var img = r.Opportunities[0].Image.Split(new char[] { ',' });
+                        <img width="250" height="200" src="@img[0]" /> <br />
+                        <b><a href="~/Opportunity/Opportunities">@r.Name</a></b><br />
+                        <b>Цена: @r.EventCost рублей</b><br />
+                        <b>Продолжительность: @r.Duration минут</b>
+                        <br />
                     }
                 }
             }
 
         </div>
-    </div>
+        @*<div class="col-md-3">
+            Ваши маршруты:
+
+        </div>*@
 </body>
 </html>

@@ -23,6 +23,8 @@ namespace WeekendPlan.Models
         public virtual ICollection<CommentFilm> CommentsFilm { get; set; }
         public UserProfile Author { get; set; }
 
+        //public Int32 Opportunity_OpportunityId { get; set; }
+
         public static Comment AddComment(Comment c)
         {
             DbConnect connector = new DbConnect();
