@@ -56,8 +56,61 @@ namespace WeekendPlan.Models
         public List<Comment> Comments { get; set; }
         public List<String> Tags { get; set; }
 
+        public static List<Opportunity> GetOpportunitiesByTimeForUser(UserProfile user, DateTime time, List<Opportunity> resAll, 
+            List<Opportunity> opportunity, int count
+            //, String location, int typeVacation, List<Tag> tags = null, int? price = null,
+            //String transport = null, int countPersons = 0, int countEvents = 1, bool allWeather = false
+            )
+        {
+            bool timeStartIsVariable = false;
+            List<Opportunity> result = new List<Opportunity>();
+            foreach(var r in resAll)
+            {
+                if(!opportunity.Any(x=>x.OpportunityId ==r.OpportunityId))
+                {
+                    result.Add(r);
+                }
+            }
+
+            var tmpToday = time.Date;
+
+            foreach(var r in result)
+            {
+                //сравняли дату окончания
+                if(r.DateTo > r.DateFrom)
+                {
+                    r.DateTo = tmpToday.AddDays(1).AddSeconds(-1);
+                }
+
+                //проверка на длительность
+                if(r.DateTo == r.DateFrom)
+                {
+                    r.DateTo.AddHours(2);
+                }
+
+                //сравняли дату начала
+                if(r.DateFrom < tmpToday)
+                {
+                    var startHour = r.DateFrom.TimeOfDay;
+                    r.DateFrom = tmpToday;
+                    r.DateFrom.Add(startHour);
+                }
+                //проверка на время окончания меньше времени начала (ставим дату окончания = дата начала+2ч)
+
+                //определяем timeStartIsVariable (true if длительность >5ч)
+
+
+                //проверка на время начала - если timeStartIsVariable = true, то время начала равно time и время окончания сдвигаем соответственно
+                //проверка на длительность >5ч (ставим =2 часа)
+                //если нет, то проверяем startHour == tmpToday.TimeOfDay
+
+            }
+
+            return result;
+        }
+
         public static List<Opportunity> GetOpportunitiesByDateForUser(UserProfile user, DateTime date, String location,
-            int typeVacation, int count, List<Opportunity> opportunity, List<Tag> tags = null, int? price = null,
+            int typeVacation, int count, List<Opportunity> opportunity, out List<Opportunity> resAll, List<Tag> tags = null, int? price = null,
             String transport = null, int countPersons = 0, int countEvents = 1, bool allWeather = false)
         {
             List<Opportunity> result = new List<Opportunity>();
@@ -76,12 +129,7 @@ namespace WeekendPlan.Models
             result.AddRange(listEvents.Where(x =>x.TypeVacation == typeVacation));
             result.AddRange(listShows.Where(x => x.TypeVacation == typeVacation));
 
-            //generate fake id's
-
-            //foreach(var o in result)
-            //{
-            //    He
-            //}
+            resAll = result;
             List<Opportunity> resultopportunity = new List<Opportunity>();
 
             for (int i = 0; i < result.Count; i++)

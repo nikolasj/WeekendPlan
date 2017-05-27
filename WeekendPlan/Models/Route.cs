@@ -59,19 +59,20 @@ namespace WeekendPlan.Models
         }
 
         public static List<Route> GetRoutesByDateForUser(UserProfile user, DateTime date, String location,
-            int typeVacation, int count, List<Tag> tags = null, int? price = null,
+            int typeVacation, int count, out List<Opportunity> opportunitiesAllByUser,
+            List<Tag> tags = null, int? price = null,
             String transport = null, int countPersons = 0, int countEvents = 1, bool allWeather = false)
         {
             List<Route> result = new List<Route>();
             //....
+            opportunitiesAllByUser = null;
             for (int i = 0; i < count; i++)
             {
+                List<Opportunity> resAll = new List<Opportunity>();
                 List<Opportunity> tempOpList =
                     Opportunity.GetOpportunitiesByDateForUser(user, date, location, typeVacation, 
-                    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), null, (tags==null) ? Tag.GetTagsByUser(user.UserId):tags);
-                //tempOpList.AddRange(
-                //    Opportunity.GetOpportunitiesByDateForUser(user, date.AddDays(1), location, typeVacation, 
-                //    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), tempOpList));
+                    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), null, out resAll, (tags==null) ? Tag.GetTagsByUser(user.UserId):tags);
+                opportunitiesAllByUser = resAll;
                 Route temp = new Route(tempOpList, user.UserId);
                 temp.RouteDatesFrom = date.Date;
                 temp.RouteDatesTo = date.AddDays(1).AddSeconds(-1);
@@ -147,6 +148,10 @@ namespace WeekendPlan.Models
         {
             DbConnect connector = new DbConnect();
             List<Route> route = connector.Routes.Where(x => x.UserId == user.UserId).ToList();
+            foreach(var r in route)
+            {
+                r.Opportunities = connector.Opportunities.Where(x => x.RouteId == r.RouteId).ToList();
+            }
 
             return route;
         }

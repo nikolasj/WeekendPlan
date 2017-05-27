@@ -38,7 +38,7 @@ namespace WeekendPlan.ViewModels
             OpportunityId = o.OpportunityId;
             Title = o.Title;
             Description = Regex.Replace(o.Description, "<[^>]+>", string.Empty);
-            DateFrom = o.DateFrom;
+            DateFrom = o.DateFrom.AddHours(2);
             DateTo = o.DateTo;
             Duration = o.Duration;
             Cost = o.Cost;

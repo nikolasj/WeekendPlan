@@ -16,6 +16,8 @@
         <div class="row" style="margin-top: 60px;">
             <div class="col-md-4">
                 <input id="pageImage" name="files" type="file" />
+                <br />
+                <img class="pageImage" style="width:300px;height:280px" src="http://cdn.fishki.net/upload/post/201411/26/1334081/57542_trava_priroda_doroga_leto_1920x1200_wwwgdefonru.jpg" />
                 @{ string src = "";
                     if (!String.IsNullOrEmpty(Model.Picture))
                     {
@@ -32,7 +34,8 @@
             <div class="col-md-5">
                 <p>Имя: <input class="form-control" id="UserName" type="text" name="UserName" value="@Model.Name" /></p>
                 <p>Город: @Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control" })</p>
-                <p>
+                <p>Адрес: <input class="form-control" id="UserName" type="text" name="UserName" value="Пресненский Вал, 6, стр. 1" /></p>
+                @*<p>
                     Права:
                     @if (Model.DriverLicense == true)
                     {
@@ -69,7 +72,7 @@
                             }
                         }
                     </select>
-                </p>
+                </p>*@
 
 
 
@@ -78,14 +81,14 @@
             </div>
             <div class="col-md-3">
                 <a class="btn btn-default" href="~/Administration/AdministrationCommentsByUser/@Model.UserId">Комментарии</a><br />
-                <a class="btn btn-default" href="~/Profile/UsersView">Родственники</a>
+                @*<a class="btn btn-default" href="~/Profile/UsersView">Родственники</a>
                 <p>
                     Тэги:
                     @foreach (var t in Model.Tags)
                     {
                         <a href="~/Search/Search?tag=@t.Text">#@t.Text</a>
                     }
-                </p>
+                </p>*@
             </div>
         </div>
     </form>

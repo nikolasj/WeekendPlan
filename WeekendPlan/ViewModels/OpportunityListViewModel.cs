@@ -12,5 +12,6 @@ namespace WeekendPlan.ViewModels
         public DateTime Date { get; set; }
         public Int32 TypeVacation { get; set; }
         public Int32 TimeHour { get; set; }
+        public List<OpportunityViewModel> AllOpportunities { get; set; }
     }
 }

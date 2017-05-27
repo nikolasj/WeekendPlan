@@ -28,18 +28,18 @@
                     <option value="1" @(Model.TypeVacation == 1 ? "selected" : "")>Активный</option>
                     <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Пассивный</option>
                 </select><br />
-                <b>Предпочитаемый транспорт:</b>
+                @*<b>Предпочитаемый транспорт:</b>
                 <select class="form-control" id="TypeTransport" name="TypeTransport">
                     <option value="1" @(Model.TypeTransport == 1 ? "selected" : "")>Пешком</option>
                     <option value="2" @(Model.TypeTransport == 2 ? "selected" : "")>Общественный транспорт</option>
                     <option value="3" @(Model.TypeTransport == 3 ? "selected" : "")>Метро</option>
                     <option value="4" @(Model.TypeTransport == 4 ? "selected" : "")>Авто</option>
-                </select><br />
-                @*<b>Погода:</b>
+                </select><br />*@
+                <b>Погода:</b>
                     <select class="form-control" id="Wheater" name="Priority">
-                        <option value="1" @(Model.TypeVacation == 1 ? "selected" : "")>Пешком</option>
-                        <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Общественный транспорт</option>
-                    </select><br />*@
+                        <option value="1" @(Model.TypeVacation == 1 ? "selected" : "")>В помещении</option>
+                        <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Не в помещении</option>
+                    </select><br />
                 <p>Теги:</p>
                 <p id="tagsEdit" style="display:none;">
                     <textarea type="text" id="inputTags" name="inputTags" rows="4" cols="20" style="margin: 0px; width: 243px; height: 137px;">
@@ -74,7 +74,7 @@
                         <img width="250" height="200" src="@img[0]" /> <br />
                         <b><a href="~/Opportunity/Opportunities">@r.Name</a></b><br />
                         <b>Цена: @r.EventCost рублей</b><br />
-                        <b>Продолжительность: @r.Duration минут</b>
+                        <b>Продолжительность: 180 @*@r.Duration*@ минут</b>
                         <br />
                     }
                 }

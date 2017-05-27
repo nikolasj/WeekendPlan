@@ -17,15 +17,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Weekend plan", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Путеводитель досуга", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Profile", "ProfileView", "Profile")</li>
-                    <li><a href="~/Search/Search?type=film">Films</a></li>
-                    <li><a href="~/Search/Search?type=event">Events</a></li>
-                    <li><a href="~/Search/Search?type=place">Places</a></li>
-                    <li><a href="~/Opportunity/Routes">Search Route</a></li>
+                    <li>@Html.ActionLink("Профиль", "ProfileView", "Profile")</li>
+                    <li><a href="~/Search/Search?type=film">Фильмы</a></li>
+                    <li><a href="~/Search/Search?type=event">События</a></li>
+                    <li><a href="~/Search/Search?type=place">Места</a></li>
+                    <li><a href="~/Opportunity/Routes">Поиск маршрута</a></li>
+                    @*<li><a href="~/Opportunity/Routes">Admin</a></li>*@
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

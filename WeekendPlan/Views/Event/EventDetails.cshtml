@@ -63,7 +63,10 @@
         </div>
 
         <div class="col-md-6" style="margin-top: 30px;">
-            <p>@Model.BodyText</p>
+            <p><b>Описание</b> - @Model.BodyText</p>
+            <p><b>Возрастное ограничение</b> - @Model.AgeRestriction</p>
+            <p><b>Цена</b> - @Model.Price</p>
+
         </div>
         @*<div class="col-md-2" style="margin-top: 30px;">
             <p>Комментарии:</p>
@@ -81,7 +84,7 @@
             <p id="tagsText">
                 @foreach (var c in Model.Tags)
                 {
-                    <a href="~/Search/Search?tag=@c.Text">#@c.Text </a>
+                    <a href="~/Search/Search?tag=@c.Text">#@c.Text </a>                    
                 }
 
                 <span id="tagsTextUser">

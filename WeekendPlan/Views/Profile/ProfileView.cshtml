@@ -16,6 +16,8 @@
         <div class="row" style="margin-top: 60px;">
             <div class="col-md-4">
                 <input id="pageImage" name="files" type="file" />
+                <br />
+                <img class="pageImage" style="width:300px;height:280px" src="http://cdn.fishki.net/upload/post/201411/26/1334081/57542_trava_priroda_doroga_leto_1920x1200_wwwgdefonru.jpg" />
                 @{ string src = "";
                     if (!String.IsNullOrEmpty(Model.Picture))
                     {
@@ -23,7 +25,7 @@
                         if (File.Exists(System.IO.Path.Combine(path, Model.Picture)))
                         {
                             src = String.Format("/Content/Images/UserPicture/{0}", Model.Picture);
-                            <a href="@src" target="_blank"><img class="pageImage" src="@src" /></a>
+                            <a href="@src" target="_blank"><img class="pageImage" src="http://cdn.fishki.net/upload/post/201411/26/1334081/57542_trava_priroda_doroga_leto_1920x1200_wwwgdefonru.jpg" /></a>
                         }
                     }
                 }
@@ -32,6 +34,7 @@
             <div class="col-md-5">
                 <p>Имя: <input class="form-control" id="UserName" type="text" name="UserName" value="@Model.Name" /></p>
                 <p>Город: @Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control"})</p>
+                <p>Адрес: <input class="form-control" id="UserName" type="text" name="UserName" value="ул.Садовая-Кудринская, д. 5" /></p>
                 @*<p>Права:
                     @if (Model.DriverLicense == true)
                     {
@@ -84,9 +87,10 @@
                 }
                 </p>
                 <p>Маршруты:
-                @foreach(var r in Model.RoutesByUser)
+                @foreach (var r in Model.RoutesByUser)
                 {
-                    <a>@r.Name</a>
+                    <br />
+                    <a href="~/Opportunity/Opportunities">@r.Name (@r.EventCost руб.)</a>
                 }
                 </p>
                     @if (Model.UserId != null)

@@ -34,6 +34,16 @@
         <div class="col-md-3">
             <a href="~/Administration/AdministrationOpportunity" class="btn btn-default">Создать событие</a>
         </div>
+        <div class="col-md-4">
+            <form action="~/Search/Search?type=event" method="post">
+                <b>Поиск по названию:</b><input type="text" id="searchTitle" name="searchTitle" />
+                <input type="submit" id="search" name="search" value="Искать" />
+                @*<a class="btn btn-default">@Model.Genres</a>*@
+
+            </form>
+            
+        </div>
+
 </body>
 </html>
 

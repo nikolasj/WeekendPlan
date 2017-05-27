@@ -96,19 +96,26 @@
             }
         }
         <b>------------------------------------------------------------------------------------------------</b>
-
+            <button class="btn btn-primary" id="Search" type="submit" value="Search" name="btn">Вернутся к поиску маршрута</button>
+            <button class="btn btn-primary" id="Search" type="submit" value="SaveRoute" name="btn">Сохранить маршрут</button>
     </div>
 </div>
 <div id="map" style="width: 370px; height: 300px; margin-top: -33px; margin-left: 481px;" class="col-md-3"></div>
 <br />
 <br />
 <details style="width: 370px; height: 300px; margin-left: 481px;">
+    <summary>Описание маршрута</summary>
     <div id="viewContainer" style="width: 370px; height: 300px;" class="col-md-3"></div>
 </details>
-<details style="width: 370px; height: 300px; margin-left: 481px;">
+@*<details style="width: 370px; height: 300px; margin-left: 481px;">
+    <summary>Другие мероприятия</summary>
         <div style="width: 370px; height: 300px;" class="col-md-3">
-            
+            @foreach (var t in Model.AllOpportunities)
+            {
+                <br />
+                <a>@t.Title</a>
+            }
         </div>
-</details>
+</details>*@
 </body>
 </html>
