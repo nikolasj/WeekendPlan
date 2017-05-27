@@ -10,5 +10,6 @@ namespace WeekendPlan.ViewModels
     {
         public List<EventViewModel> Events { get; set; }
         public List<Tag> TagsUser { get; set; }
+        public UserProfile User { get; set; }
     }
 }

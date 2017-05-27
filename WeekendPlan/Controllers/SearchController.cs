@@ -10,6 +10,7 @@ namespace WeekendPlan.Controllers
 {
     public class SearchController : Controller
     {
+        [Authorize]
         public ActionResult Search(string tag, string type, string text, string page)
         {
             SearchListViewModel searchLVM = new SearchListViewModel();
@@ -156,6 +157,7 @@ namespace WeekendPlan.Controllers
 
         SearchListViewModel FilterEventsByPageId(SearchListViewModel searchLVM, int id)
         {
+            UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
             var pageEvents = new List<EventViewModel>();
             int count = 0;
             int idFinish = id + 5;
@@ -177,18 +179,19 @@ namespace WeekendPlan.Controllers
 
         SearchListViewModel FillEventsByTagId(int? tagId, SearchListViewModel searchLVM)
         {
+            UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
             EventListViewModel eventLVM = new EventListViewModel();
             eventLVM.Events = new List<EventViewModel>();
             List<Event> events;
             if (tagId == null)
-                events = Event.GetEvents();
+                events = Event.GetEvents().Where(x=>x.Location == user.Location && DateTime.Parse(x.DateStart) >= DateTime.Now).ToList();
             else
                 events = Event.GetEventsByTag(tagId.Value);
 
             foreach (Event e in events)
             {
                 EventViewModel eventVM = new EventViewModel(e, null);
-                //filmLVM.Films.Add(filmVM);
+                //filmLVM.Films.Add(filmVM);               
                 searchLVM.Events.Add(eventVM);
             }
             return searchLVM;

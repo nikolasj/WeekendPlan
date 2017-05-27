@@ -1,0 +1,49 @@
+﻿@using WeekendPlan.ViewModels
+@model AdministrationListViewModel
+@{
+    ViewBag.Title = "Administration";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Administration</title>
+</head>
+<body>
+    <div class="row" style="margin-top: 50px;">
+        <br />
+        <div class="col-md-3">
+            <b>Пользователи:</b><br />
+            @foreach (var u in Model.Profiles)
+            {
+                <a href="~/Administration/AdministrationProfileView/@u.UserId">@u.Name</a>
+                <br />
+            }
+        </div>
+
+        <div class="col-md-3">
+            <b>Варианты событий:</b><br />
+            @foreach(var o in Model.Opportunities)
+            {
+                <a href="~/Administration/AdministrationOppor/@o.OpportunityId">@o.Title</a>
+                <br />          
+            }
+        </div>
+        <div class="col-md-3">
+            <a href="~/Administration/AdministrationOpportunity" class="btn btn-default">Создать событие</a>
+        </div>
+        <div class="col-md-4">
+            <form action="~/Search/Search?type=event" method="post">
+                <b>Поиск по названию:</b><input type="text" id="searchTitle" name="searchTitle" />
+                <input type="submit" id="search" name="search" value="Искать" />
+                @*<a class="btn btn-default">@Model.Genres</a>*@
+
+            </form>
+            
+        </div>
+
+</body>
+</html>
+

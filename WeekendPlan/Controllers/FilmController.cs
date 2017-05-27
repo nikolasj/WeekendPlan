@@ -41,6 +41,7 @@ namespace WeekendPlan.Controllers
             return View();
         }
 
+        //[Authorize(Roles = "admin")]
         public ActionResult FilmDetails(int? id)
         {
             UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());

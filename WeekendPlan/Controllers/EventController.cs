@@ -8,6 +8,7 @@ using WeekendPlan.ViewModels;
 
 namespace WeekendPlan.Controllers
 {
+    [Authorize]
     public class EventController : Controller
     {
 
@@ -36,25 +37,30 @@ namespace WeekendPlan.Controllers
             }
             return View();
         }
-
+        [Authorize]
         public ActionResult EventDetails(int? id)
         {
             UserProfile user = UserProfile.GetUsers().Find(x => x.Name.ToLower() == User.Identity.Name.ToLower());
-            if (id == null)
+            if (user != null)
             {
-                return HttpNotFound();
-            }
 
-            Event ev = Event.GetEvents().FirstOrDefault(x => x.EventId == id);
-            if (ev != null)
-            {
-                EventViewModel eventVM = new EventViewModel(ev,user.UserId);
-                return View("EventDetails", eventVM);
+                if (id == null)
+                {
+                    return HttpNotFound();
+                }
+
+                Event ev = Event.GetEvents().FirstOrDefault(x => x.EventId == id);
+                if (ev != null)
+                {
+                    EventViewModel eventVM = new EventViewModel(ev, user.UserId);
+                    return View("EventDetails", eventVM);
+                }
+                else
+                {
+                    return View("EventDetails", "???");
+                }
             }
-            else
-            {
-                return View("EventDetails", "???");
-            }
+            return View("~/Account/Login");
         }
 
         public ActionResult EventComments(string id, string btnSave)

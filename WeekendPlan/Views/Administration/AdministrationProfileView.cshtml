@@ -25,7 +25,7 @@
                         if (File.Exists(System.IO.Path.Combine(path, Model.Picture)))
                         {
                             src = String.Format("/Content/Images/UserPicture/{0}", Model.Picture);
-                            <a href="@src" target="_blank"><img class="pageImage" src="http://cdn.fishki.net/upload/post/201411/26/1334081/57542_trava_priroda_doroga_leto_1920x1200_wwwgdefonru.jpg" /></a>
+                            <a href="@src" target="_blank"><img class="pageImage" src="@src" /></a>
                         }
                     }
                 }
@@ -33,9 +33,10 @@
             </div>
             <div class="col-md-5">
                 <p>Имя: <input class="form-control" id="UserName" type="text" name="UserName" value="@Model.Name" /></p>
-                <p>Город: @Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control"})</p>
-                <p>Адрес: <input class="form-control" id="UserName" type="text" name="UserName" value="ул.Садовая-Кудринская, д. 5" /></p>
-                @*<p>Права:
+                <p>Город: @Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control" })</p>
+                <p>Адрес: <input class="form-control" id="UserName" type="text" name="UserName" value="Пресненский Вал, 6, стр. 1" /></p>
+                @*<p>
+                    Права:
                     @if (Model.DriverLicense == true)
                     {
                         <input id="UserDriverLicense" type="checkbox" name="UserDriverLicense" checked="checked" />
@@ -44,19 +45,20 @@
                     {
                         <input id="UserDriverLicense" type="checkbox" name="UserDriverLicense" />
                     }
-                </p>*@
-                @*<p>Машина: 
-       @if (Model.Car==true)
-       {
-            <input id="UserCar" type="checkbox" name="UserCar" checked="checked" />
-       }*@
-       @*else
-       {
-            <input id="UserCar" type="checkbox" name="UserCar"/>
-       }*@
                 </p>
                 <p>
-                    @*Количество попутчиков:  
+                    Машина:
+                    @if (Model.Car == true)
+                    {
+                        <input id="UserCar" type="checkbox" name="UserCar" checked="checked" />
+                    }
+                    else
+                    {
+                        <input id="UserCar" type="checkbox" name="UserCar" />
+                    }
+                </p>
+                <p>
+                    Количество попутчиков:
                     <select id="GroupCount" name="GroupCount">
                         @for (int i = 1; i <= 10; i++)
                         {
@@ -65,39 +67,28 @@
                                 <option value="@i" selected>@i</option>
                             }
                             else
-                            { 
+                            {
                                 <option value="@i">@i</option>
                             }
                         }
-                    </select>*@
-                </p>
+                    </select>
+                </p>*@
 
 
 
 
-                                      <button class="btn btn-primary" id="Save" type="submit" value="Сохранить" name="btnSave">Сохранить</button>
+                <button class="btn btn-primary" id="Save" type="submit" value="Сохранить" name="btnSave">Сохранить</button>
             </div>
             <div class="col-md-3">
-                <a class="btn btn-default" href="~/Profile/CommentsByUser">Комментарии</a><br />
-                @*<a class="btn btn-default" href="~/Profile/UsersView">Родственники</a>*@
-                <p>Тэги: 
-                @foreach(var t in Model.Tags)
-                {
-                    <a href="~/Search/Search?tag=@t.Text">#@t.Text</a>
-                }
-                </p>
-                <p>Маршруты:
-                @foreach (var r in Model.RoutesByUser)
-                {
-                    <br />
-                    <a href="~/Opportunity/Opportunities">@r.Name (@r.EventCost руб.)</a>
-                }
-                </p>
-                    @if (Model.UserId != null)
+                <a class="btn btn-default" href="~/Administration/AdministrationCommentsByUser/@Model.UserId">Комментарии</a><br />
+                @*<a class="btn btn-default" href="~/Profile/UsersView">Родственники</a>
+                <p>
+                    Тэги:
+                    @foreach (var t in Model.Tags)
                     {
-                            @*<p>Заполните анкету</p>*@
-                            <p><a class="btn btn-default" href="~/Questionnaire/Questionnaire?questionId=1">Перейти к анкете</a></p>
+                        <a href="~/Search/Search?tag=@t.Text">#@t.Text</a>
                     }
+                </p>*@
             </div>
         </div>
     </form>

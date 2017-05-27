@@ -10,35 +10,80 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Routes</title>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/change_tag.js"></script>
 </head>
 <body>
     <div class="row" style="margin-top: 50px;">
         <br />
         <div class="col-md-3">
-            <form action="~/Opportunity/Opportunities" method="post">
+            <form action="~/Opportunity/SearchRoute" method="post">
                 <b>Выберите дату:</b><br />
                 <input id="Date" type="datetime-local" class="form-control" name="Date" value="@ViewBag.Date" /> @*input id="TaskDataStart" style="display:none;" type="datetime-local" class="form-control" name="TaskDataStart" value="@Model.DateStartStr">*@
                 <b>Выберите город:</b>
                 <p>@Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control" })</p>
                 <b>Выберите тип отдыха:</b>
-                <select class="form-control" id="TypeVacation" name="Priority">
+                <select class="form-control" id="TypeVacation" name="TypeVacation">
                     <option value="1" @(Model.TypeVacation == 1 ? "selected" : "")>Активный</option>
                     <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Пассивный</option>
-                </select>
+                </select><br />
+                @*<b>Предпочитаемый транспорт:</b>
+                <select class="form-control" id="TypeTransport" name="TypeTransport">
+                    <option value="1" @(Model.TypeTransport == 1 ? "selected" : "")>Пешком</option>
+                    <option value="2" @(Model.TypeTransport == 2 ? "selected" : "")>Общественный транспорт</option>
+                    <option value="3" @(Model.TypeTransport == 3 ? "selected" : "")>Метро</option>
+                    <option value="4" @(Model.TypeTransport == 4 ? "selected" : "")>Авто</option>
+                </select><br />*@
+                <b>Погода:</b>
+                    <select class="form-control" id="Wheater" name="Priority">
+                        <option value="1" @(Model.TypeVacation == 1 ? "selected" : "")>В помещении</option>
+                        <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Не в помещении</option>
+                    </select><br />
+                <p>Теги:</p>
+                <p id="tagsEdit" style="display:none;">
+                    <textarea type="text" id="inputTags" name="inputTags" rows="4" cols="20" style="margin: 0px; width: 243px; height: 137px;">
+                        @String.Join(" ", Model.TagsByUser.Select(x => "#" + x).ToList())
+                    </textarea>
+                    <input class="btn btn-primary" id="SaveTags" type="submit" value="save" name="btnSave" />
+                </p>
+                <p id="tagsText">
+                    <span id="tagsTextUser">
+                        @foreach (var c in Model.TagsByUser)
+                        {
+                            <a href="~/Search/Search?tag=@c">#@c </a>
+                        }
+                    </span>
+                </p>
+                <span class="btn" onclick="ChangeTag();" id="editTags">Изменить теги</span>
                 <br />
-                <button class="btn btn-primary" id="Search" type="submit" value="Искать" name="Search">Искать маршрут</button>
+
+                <button class="btn btn-primary" id="Search" type="submit" value="Search" name="btn">Искать маршрут</button>
+                <button class="btn btn-primary" id="Search" type="submit" value="SaveRoute" name="btn">Сохранить маршрут</button>
             </form>
+
         </div>
         <div class="col-md-6">
-            @foreach(var r in Model.Routes)
+            @if (Model.Routes.Count != 0)
             {
-                <img src="@r.Opportunities[0].Image"/> 
-                <b>@r.Name</b><br />
-                <b>@r.EventCost</b><br />
-                <b>@r.Duration</b>
-                <br />
+                foreach (var r in Model.Routes)
+                {
+                    if (r.Opportunities.Count != 0)
+                    {
+                        var img = r.Opportunities[0].Image.Split(new char[] { ',' });
+                        <img width="250" height="200" src="@img[0]" /> <br />
+                        <b><a href="~/Opportunity/Opportunities">@r.Name</a></b><br />
+                        <b>Цена: @r.EventCost рублей</b><br />
+                        <b>Продолжительность: 180 @*@r.Duration*@ минут</b>
+                        <br />
+                    }
+                }
             }
+
         </div>
-    </div>
+        @*<div class="col-md-3">
+            Ваши маршруты:
+
+        </div>*@
 </body>
 </html>

@@ -1,0 +1,25 @@
+﻿@using WeekendPlan.ViewModels
+@model ProfileViewModel
+@{
+    ViewBag.Title = "Comments";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CommentByUser</title>
+</head>
+<body>
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-md-4">
+            @{  <b>Комментарии:</b><br />
+                foreach (var c in Model.Comments)
+                {
+                    <p>Комментарий:<a href="~/Administration/AdministrationUpdateOrDeleteComment/@c.CommentId"> @c.Text</a></p>
+                }
+            }
+
+        </div>
+</body>
+</html>

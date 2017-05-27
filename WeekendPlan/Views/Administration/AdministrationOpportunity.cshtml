@@ -1,0 +1,27 @@
+﻿@using WeekendPlan.ViewModels
+@model OpportunityViewModel
+@{
+    ViewBag.Title = "Opportunity";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AdministrationOpportunity</title>
+</head>
+<body>
+    <form action="~/Administration/AdministrationCreateOpportunity" method="post">
+        <div class="row" style="margin-top: 60px;">
+            <div class="col-md-4">
+                <p>Заголовок: <input class="form-control" id="Title" type="text" name="Title" value="@Model.Title" /></p><br />
+                <p>Описание: <textarea type="text" id="Description" name="Description" rows="4" cols="20" style="margin: 0px; width: 243px; height: 137px;"></textarea></p><br />
+                <p>Продолжительность: <input class="form-control" id="Duration" type="text" name="Duration" value="@Model.Duration" /></p><br />
+                <p>Цена: <input class="form-control" id="Cost" type="text" name="Cost" value="@Model.Cost" /></p><br />
+            </div>
+        </div>
+        <button class="btn btn-primary" id="Save" type="submit" value="Сохранить" name="btnSave">Сохранить</button>
+    </form>
+</body>
+</html>

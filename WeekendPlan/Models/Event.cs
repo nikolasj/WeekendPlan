@@ -93,19 +93,30 @@ namespace WeekendPlan.Models
                     locationEvents.Add(e);
                 }
             }
-            var tagsByUser = Tag.GetTagsByUser(user.UserId);
+            var tagsByUser = tags;// Tag.GetTagsByUser(user.UserId);
 
             foreach(var e in locationEvents)
             {
-                foreach(var t in tagsByUser)
+                if (tagsByUser != null)
                 {
-                    if(e.Tags.Contains(t.Text)&&!resultEvents.Any(x=>x.EventId==e.EventId))
+                    foreach (var t in tagsByUser)
                     {
-                        resultEvents.Add(e);
+                        if (e.Tags.Contains(t.Text) && !resultEvents.Any(x => x.EventId == e.EventId))
+                        {
+                            resultEvents.Add(e);
+                        }
                     }
                 }
             }
-            
+
+            if (resultEvents.Count < 3)
+            {
+                foreach (var e in locationEvents)
+                {
+                    resultEvents.Add(e);
+                }
+            }
+
             return resultEvents.ToList();
         }
 

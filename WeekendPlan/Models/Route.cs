@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
+using WeekendPlan.DataAccessLayer;
 
 namespace WeekendPlan.Models
 {
@@ -26,7 +27,7 @@ namespace WeekendPlan.Models
         [Column("rating")]
         public String Rating { get; set; }
         [Column("user_id")]
-        internal Int32 UserId { get; set; }
+        public Int32 UserId { get; set; }
         [Column("route_dates_to")]
         public DateTime RouteDatesTo { get; set; }
         [Column("route_dates_from")]
@@ -36,6 +37,11 @@ namespace WeekendPlan.Models
         public List<Opportunity> Opportunities { get; set; }
         public List<Comment> Comments { get; set; }
         public List<String> Tags { get; set; }
+
+        public Route ()
+        {
+
+        }
 
         public Route(List<Opportunity> list, int userId)
         {
@@ -53,20 +59,25 @@ namespace WeekendPlan.Models
         }
 
         public static List<Route> GetRoutesByDateForUser(UserProfile user, DateTime date, String location,
-            int typeVacation, int count)
+            int typeVacation, int count, out List<Opportunity> opportunitiesAllByUser,
+            List<Tag> tags = null, int? price = null,
+            String transport = null, int countPersons = 0, int countEvents = 1, bool allWeather = false)
         {
             List<Route> result = new List<Route>();
             //....
+            opportunitiesAllByUser = null;
             for (int i = 0; i < count; i++)
             {
-                List<Opportunity> tempOpList = 
-                    Opportunity.GetOpportunitiesByDateForUser(user, date, location, typeVacation, Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]));
-                tempOpList.AddRange(
-                    Opportunity.GetOpportunitiesByDateForUser(user, date.AddDays(1), location, typeVacation, Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"])));
+                List<Opportunity> resAll = new List<Opportunity>();
+                List<Opportunity> tempOpList =
+                    Opportunity.GetOpportunitiesByDateForUser(user, date, location, typeVacation, 
+                    Int32.Parse(WebConfigurationManager.AppSettings["DefaultOpportunitiesCount"]), null, out resAll, (tags==null) ? Tag.GetTagsByUser(user.UserId):tags);
+                opportunitiesAllByUser = resAll;
                 Route temp = new Route(tempOpList, user.UserId);
-                temp.RouteDatesFrom = date;
-                temp.RouteDatesTo = date.AddDays(1);
-                temp.Name = "Маршрут на " + temp.RouteDatesFrom.ToShortDateString() + "-" + temp.RouteDatesTo.ToShortDateString() + " номер "+(i+1).ToString();
+                temp.RouteDatesFrom = date.Date;
+                temp.RouteDatesTo = date.AddDays(1).AddSeconds(-1);
+                //temp.Name = "Маршрут на " + temp.RouteDatesFrom.ToShortDateString() + "-" + temp.RouteDatesTo.ToShortDateString() + " номер " + (i + 1).ToString();
+                temp.Name = "Маршрут на " + temp.RouteDatesFrom.ToShortDateString();
 
                 result.Add(temp);
             }
@@ -91,13 +102,13 @@ namespace WeekendPlan.Models
                     EventCost += String.IsNullOrWhiteSpace(op.CurrentEvent.Price) ? 0 : Helper.GetPriceAverage(op.CurrentEvent.Price);
                     DateTime dateTo = DateTime.MaxValue;
                     DateTime dateFrom = DateTime.MinValue;
-                    
+
                     if (!String.IsNullOrWhiteSpace(op.CurrentEvent.DateEnd))
                     {
-                         dateTo = DateTime.Parse(op.CurrentEvent.DateEnd);
+                        dateTo = DateTime.Parse(op.CurrentEvent.DateEnd);
                         if (dateTo.Year == 1) dateTo.AddYears(op.DateTo.Year);
                     }
-                    
+
                     if (!String.IsNullOrWhiteSpace(op.CurrentEvent.DateStart))
                     {
                         dateFrom = DateTime.Parse(op.CurrentEvent.DateStart);
@@ -126,12 +137,32 @@ namespace WeekendPlan.Models
                     }
                     else
                         Duration += Int32.Parse(WebConfigurationManager.AppSettings["DefaultDuration"]);
-                    }
+                }
             }
 
             this.Duration = Duration.ToString();
             this.EventCost = EventCost.ToString();
         }
 
+        public static List<Route> GetRoutesByUser(UserProfile user)
+        {
+            DbConnect connector = new DbConnect();
+            List<Route> route = connector.Routes.Where(x => x.UserId == user.UserId).ToList();
+            foreach(var r in route)
+            {
+                r.Opportunities = connector.Opportunities.Where(x => x.RouteId == r.RouteId).ToList();
+            }
+
+            return route;
+        }
+
+        public static int SaveRouteByUser(Route route)
+        {
+
+            DbConnect connector = new DbConnect();
+            connector.Routes.Add(route);//?
+            connector.SaveChanges();
+            return route.RouteId;
+        }
     }
 }

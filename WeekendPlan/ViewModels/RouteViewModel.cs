@@ -36,6 +36,7 @@ namespace WeekendPlan.ViewModels
             UserId = r.UserId;
             RouteDatesTo = r.RouteDatesTo;
             RouteDatesFrom = r.RouteDatesFrom;
+            //Opportunities[0].Image = r.Opportunities[0].Image;
 
             Author = r.Author;
             Opportunities = r.Opportunities;

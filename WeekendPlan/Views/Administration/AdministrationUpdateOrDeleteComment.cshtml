@@ -1,0 +1,25 @@
+﻿@using WeekendPlan.ViewModels
+@model CommentViewModel
+@{
+    ViewBag.Title = "Comment details";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AdministrationUpdateOrDeleteComment</title>
+</head>
+<body>
+    <div style="margin-top: 30px;">
+        <form action="~/Administration/AdministrationComments/@Model.CommentId" method="post">
+            <p>Комментарии:</p>
+            <p>@Model.Text</p>
+            <textarea id="Comment" name="Comment" rows="4" cols="20" style="margin: 0px; width: 243px; height: 137px;">Напишите комментарий...</textarea>
+            <input class="btn btn-primary" id="Save" type="submit" value="save" name="btn" />
+            <input class="btn btn-primary" id="Delete" type="submit" value="delete" name="btn" />
+        </form>
+    </div>
+</body>
+</html>

@@ -53,21 +53,6 @@
         </div>*@
     <br />
     <div class="row" style="margin-top: 40px;">
-        <div class="col-md-3">
-            <form action="~/Opportunity/Opportunities" method="post">
-                <b>Выберите дату:</b><br />
-                <input id="Date" type="datetime-local" class="form-control" name="Date" value="@ViewBag.Date" /> @*input id="TaskDataStart" style="display:none;" type="datetime-local" class="form-control" name="TaskDataStart" value="@Model.DateStartStr">*@
-                <b>Выберите город:</b>
-                <p>@Html.DropDownList("Cities", (SelectList)ViewBag.DropDownValuesCities, new { @class = "form-control" })</p>
-                <b>Выберите тип отдыха:</b>
-                <select class="form-control" id="TypeVacation" name="Priority">
-                    <option value="1" @(Model.TypeVacation == 1 ? "selected" : "")>Активный</option>
-                    <option value="2" @(Model.TypeVacation == 2 ? "selected" : "")>Пассивный</option>
-                </select>
-                <br />
-                <button class="btn btn-primary" id="Search" type="submit" value="Искать" name="Search">Искать маршрут</button>
-            </form>
-        </div>
         <div class="col-md-6">
             @*style="float:left;"*@
 
@@ -84,7 +69,7 @@
                         <a href="#" style="text-decoration: none;" title="Изменить задачу!">@t.Title</a>
                         @*<div style=" display:inline-block">(@t.DateTo.ToShortDateString())</div>*@
                         @*<input id="CheckboxDone_@t.OpportunityId" type="checkbox" data-target="~/Opportunity/MarkOpportunityDone/@t.OpportunityId" />*@
-                        <a href="~/Opportunity/MarkOpportunityDelete/@t.OpportunityId"><img src="https://www.0629.com.ua/design/img/cross-gr.png" /></a>
+                        <a href="~/Opportunity/MarkOpportunityDelete/@t.OpportunityId" title="удалить"><img src="https://www.0629.com.ua/design/img/cross-gr.png" /></a>
                     </div>
                     flagTime = false;
                 }
@@ -111,14 +96,26 @@
             }
         }
         <b>------------------------------------------------------------------------------------------------</b>
-
+            <button class="btn btn-primary" id="Search" type="submit" value="Search" name="btn">Вернутся к поиску маршрута</button>
+            <button class="btn btn-primary" id="Search" type="submit" value="SaveRoute" name="btn">Сохранить маршрут</button>
     </div>
 </div>
 <div id="map" style="width: 370px; height: 300px; margin-top: -33px; margin-left: 481px;" class="col-md-3"></div>
 <br />
 <br />
 <details style="width: 370px; height: 300px; margin-left: 481px;">
+    <summary>Описание маршрута</summary>
     <div id="viewContainer" style="width: 370px; height: 300px;" class="col-md-3"></div>
 </details>
+@*<details style="width: 370px; height: 300px; margin-left: 481px;">
+    <summary>Другие мероприятия</summary>
+        <div style="width: 370px; height: 300px;" class="col-md-3">
+            @foreach (var t in Model.AllOpportunities)
+            {
+                <br />
+                <a>@t.Title</a>
+            }
+        </div>
+</details>*@
 </body>
 </html>

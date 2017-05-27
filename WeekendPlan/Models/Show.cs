@@ -39,7 +39,7 @@ namespace WeekendPlan.Models
         public static List<Show> GetShowsForOpportunity(DateTime concreteDate, UserProfile user, List<Place> places, List<Tag> tags = null, int? price = null,
     String location = null, String transport = null, int countPersons = 0, int countEvents = 1, bool allWeather = false)
         {
-            List<Film> films = Film.GetFilmsForOpportunity(concreteDate,user);
+            List<Film> films = Film.GetFilmsForOpportunity(concreteDate,user,tags);
             DbConnect connector = new DbConnect();
             List<Show> shows = connector.Shows.Where(x=>x.Datetime <= concreteDate && x.Datetime >=DateTime.Now).ToList();
             //List<Place> places = connector.Places.Where(x=>x.Location == user.Location).ToList();
