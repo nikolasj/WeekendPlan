@@ -12,8 +12,8 @@ namespace WeekendPlan.ViewModels
         public Int32 OpportunityId { get; set; }
         public String Title { get; set; }
         public String Description { get; set; }
-        public DateTime? DateFrom { get; set; }
-        public DateTime? DateTo { get; set; }
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTo { get; set; }
         public String Duration { get; set; }
         public String Cost { get; set; }
         public Int32 PlaceId { get; set; }

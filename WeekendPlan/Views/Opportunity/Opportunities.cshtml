@@ -37,24 +37,9 @@
     </script>
 </head>
 <body>
-    @*<div class="row" style="margin-top: 40px;">
-            <br />
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                @foreach (var o in Model.Opportunities)
-                {
-                    <b>@o.Title</b>
-                        <p>@o.Description</p>
-                        <p>@o.DateFrom - @o.DateTo</p>
-                        <br />
-                }
-            </div>
-            <div class="col-md-3"> </div>
-        </div>*@
     <br />
     <div class="row" style="margin-top: 40px;">
         <div class="col-md-6">
-            @*style="float:left;"*@
 
         <br />
         @for (int i = 0; i <= 23; i++)
@@ -67,8 +52,7 @@
                     <div id="TaskCalendarTime" style="width:480px; height:33px; background-color:#BEBEBE; margin-bottom:2px; display:block;">
                         <a style="text-decoration: none;">@i:00</a>
                         <a href="#" style="text-decoration: none;" title="Изменить задачу!">@t.Title</a>
-                        @*<div style=" display:inline-block">(@t.DateTo.ToShortDateString())</div>*@
-                        @*<input id="CheckboxDone_@t.OpportunityId" type="checkbox" data-target="~/Opportunity/MarkOpportunityDone/@t.OpportunityId" />*@
+                        
                         <a href="~/Opportunity/MarkOpportunityDelete/@t.OpportunityId" title="удалить"><img src="https://www.0629.com.ua/design/img/cross-gr.png" /></a>
                     </div>
                     flagTime = false;
@@ -91,11 +75,12 @@
                 <div id="TaskCalendarTime" style="width:480px; height:33px; background-color:#B0DCE0; margin-bottom:2px; ">
                     @if (i >= 0 && i < 8)
                     { continue; }
-                    <a id="CreateTask" style="text-decoration: none;">@i:00</a>
+                    <a id="CreateTask" style="text-decoration: none;" href="~/Opportunity/SelectOpportunity/">@i:00  <b>+</b></a>
                 </div>
             }
         }
         <b>------------------------------------------------------------------------------------------------</b>
+            @*<a href="#" class="btn btn-primary">Выбрать другой маршрут</a><br />*@
             <button class="btn btn-primary" id="Search" type="submit" value="Search" name="btn">Вернутся к поиску маршрута</button>
             <button class="btn btn-primary" id="Search" type="submit" value="SaveRoute" name="btn">Сохранить маршрут</button>
     </div>
@@ -103,19 +88,12 @@
 <div id="map" style="width: 370px; height: 300px; margin-top: -33px; margin-left: 481px;" class="col-md-3"></div>
 <br />
 <br />
+    
 <details style="width: 370px; height: 300px; margin-left: 481px;">
     <summary>Описание маршрута</summary>
     <div id="viewContainer" style="width: 370px; height: 300px;" class="col-md-3"></div>
 </details>
-@*<details style="width: 370px; height: 300px; margin-left: 481px;">
-    <summary>Другие мероприятия</summary>
-        <div style="width: 370px; height: 300px;" class="col-md-3">
-            @foreach (var t in Model.AllOpportunities)
-            {
-                <br />
-                <a>@t.Title</a>
-            }
-        </div>
-</details>*@
+    <br />
+
 </body>
 </html>

@@ -162,6 +162,7 @@ namespace WeekendPlan.Models
             DbConnect connector = new DbConnect();
             connector.Routes.Add(route);//?
             connector.SaveChanges();
+            
             return route.RouteId;
         }
     }

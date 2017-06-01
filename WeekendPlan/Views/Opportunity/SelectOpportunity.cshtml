@@ -1,0 +1,43 @@
+﻿@using WeekendPlan.ViewModels
+@model OpportunityListViewModel
+@{
+    ViewBag.Title = "Opportunities";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SelectOpportunity</title>
+</head>
+<body>
+    <div class="row" style="margin-top: 40px;">
+        <div class="col-md-6">
+            @foreach (var t in Model.Opportunities)
+            {
+                <br />
+                <img />
+                <a><b>@t.Title</b></a>
+                @*<b>@t.DateFrom</b>*@
+                <br />
+                <a class="btn btn-default" href="~/Opportunity/AddOpportunity/@t.OpportunityId">Выбрать</a>
+            }
+        </div>
+        <div class="col-md-6" style="margin-top: 20px;">
+           <b>Ссылки на интересные сайты:</b><br />
+            <a href="https://geoguessr.com/">GeoGuessr</a><br />
+            <p>Этот сервис с помощью Google Maps забрасывает вас в разные точки мира. А вы можете угадать, где вы находитесь.</p>
+            <a href="http://klava.org/#rus_basic">Обучение десятипальцевой слепой печати</a><br />
+            <p>Если вы до сих пор набираете текст двумя пальцами - эта ссылка для вас.</p>
+            <a href="http://everynoise.com/engenremap.html">Every Noise at Once - вся музыка тут</a><br />
+            <p>Находка для меломанов! Сайт представляет из себя облако тегов все-всех известных жанров музыки.</p>
+            <p> При нажатии на любой из них начинается трансляция выбранного жанра. Хотите ознакомиться с корсиканским фолком?</p>
+            <p> Нет ничего проще - кликайте и наслаждайтесь радиотрансляцией данного направления!</p>
+            <a href="http://listentothe.cloud/">Переговоры авиадиспетчеров</a><br />
+            <p>Живая трансляция радио-переговоров разных аэропортов мира с эмбиентом на фоне.</p>
+            <a href="http://onlineguru.ru/">Игры онлайн бесплатно</a>
+        </div>
+    </div>
+</body>
+</html>

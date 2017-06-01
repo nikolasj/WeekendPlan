@@ -27,7 +27,7 @@ namespace WeekendPlan.Controllers
                     routeLVM = Session["user_routes"] as RouteListViewModel;
 
                     int date_start_hour = 0;
-                    int i =0;
+                    //int i =0;
                     foreach (var oppor in routeLVM.Routes)
                     {
                         foreach (var o in oppor.Opportunities)
@@ -36,21 +36,31 @@ namespace WeekendPlan.Controllers
                             if (o.DateFrom != null)
                             {
                                 date_start_hour = Int32.Parse(Helper.ConvertDateStartHourToInt(o.DateFrom.AddHours(2).ToString()));
+                                if (date_start_hour < 8)
+                                {
+                                    date_start_hour = 8;
+                                }
+                                if (date_start_hour > 22)
+                                {
+                                    date_start_hour = 21;
+                                }
                             }
                             if (date_start_hour != 0)
                             {
                                 opportunityVM.TimeHour = date_start_hour;
                             }
-                            if (i!=0 && i !=1 && i!=2 &&i!=5 && i!=3)
-                                opportunityLVM.Opportunities.Add(opportunityVM);
-                            i++;
+                            else
+                            {
+                                opportunityVM.TimeHour = 12;
+                            }
+                            opportunityLVM.Opportunities.Add(opportunityVM);
                         }
                     }
 
                     //opportunityLVM = Session["user_opportunities"] as OpportunityListViewModel;
                     Session["user_opportunities"] = opportunityLVM;
                     opportunityLVM.AllOpportunities = routeLVM.AllOpportunitiesByUser[0].Opportunities;
-                   //opportunityLVM.Opportunities.RemoveAt(5);
+                    //opportunityLVM.Opportunities.RemoveAt(5);
                     return View("Opportunities", opportunityLVM);
                 }
                 //-------------------------------
@@ -69,7 +79,7 @@ namespace WeekendPlan.Controllers
                 {
                     String location = City.GetCities().Find(x => x.CityId == cityId).Slug;
                     List<Opportunity> resAll = new List<Opportunity>();
-                    List<Opportunity> opportunity = Opportunity.GetOpportunitiesByDateForUser(user, date, location, opportunityLVM.TypeVacation, 4, null,out resAll);
+                    List<Opportunity> opportunity = Opportunity.GetOpportunitiesByDateForUser(user, date, location, opportunityLVM.TypeVacation, 4, null, out resAll);
                     int date_start_hour = 0;
                     foreach (var o in opportunity)
                     {
@@ -168,7 +178,7 @@ namespace WeekendPlan.Controllers
                             RouteId = r.RouteId
                         };
                         var opportuniryId = Opportunity.SaveOpportunityByRouteId(o);
-                    }                   
+                    }
                     if (user != null)
                     {
                         RouteListViewModel routeLVM = new RouteListViewModel();
@@ -185,10 +195,8 @@ namespace WeekendPlan.Controllers
                         routeLVM.TypeVacation = (Request.Form["TypeVacation"] != null) ? Int32.Parse(Request.Form["TypeVacation"]) : 1;
                         String[] arrayTags = Request.Form["inputTags"].Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
                         List<Tag> newTags = new List<Tag>();
-                        //--Transport
                         routeLVM.TypeTransport = (Request.Form["TypeTransport"] != null) ? Int32.Parse(Request.Form["TypeTransport"]) : 1;
-                        //--AllWeather
-                        //routeLVM.AllWeather
+
 
                         foreach (String tagValue in arrayTags)
                         {
@@ -201,7 +209,7 @@ namespace WeekendPlan.Controllers
                         routeLVM = GetRoutesByParameters(routeLVM, user, date, location, newTags);
 
                         return View("Routes", routeLVM);
-                    }                 
+                    }
                     return View("~/Home/Index");
                 case "Search":
                     if (user != null)
@@ -265,8 +273,8 @@ namespace WeekendPlan.Controllers
                 //}
                 routeLVM.Routes.Add(routeVM);
             }
-
-            foreach(var o in opportunitiesAllByUser)
+            Session["user_opportunities_all_by_user"] = opportunitiesAllByUser;
+            foreach (var o in opportunitiesAllByUser)
             {
                 OpportunityViewModel opportunityVM = new OpportunityViewModel(o);
                 opportunityLVM.Opportunities.Add(opportunityVM);
@@ -306,11 +314,22 @@ namespace WeekendPlan.Controllers
                 OpportunityListViewModel opportunityLVM = new OpportunityListViewModel();
                 opportunityLVM.Opportunities = new List<OpportunityViewModel>();
                 RouteListViewModel routeLVM = new RouteListViewModel();
-                if (Session["user_opportunities"] != null)
+                if (Session["user_routes"] != null)
                 {
-                    opportunityLVM = Session["user_opportunities"] as OpportunityListViewModel;
-                    opportunityLVM.Opportunities.Remove(opportunityLVM.Opportunities.Find(x => x.OpportunityId == id));
-                    Session["user_opportunities"] = opportunityLVM;
+                    routeLVM = Session["user_routes"] as RouteListViewModel;
+
+                    int date_start_hour = 0;
+                    //int i =0;
+                    foreach (var oppor in routeLVM.Routes)
+                    {
+                        var op = oppor.Opportunities.Find(x => x.OpportunityId == id);
+                        oppor.Opportunities.Remove(op);
+                    }
+                    
+
+                    //opportunityLVM = Session["user_opportunities"] as OpportunityListViewModel;
+                    //opportunityLVM.Opportunities.Remove(opportunityLVM.Opportunities.Find(x => x.OpportunityId == id));
+                    //Session["user_opportunities"] = opportunityLVM;
 
                     //routeLVM = Session["user_routes"] as RouteListViewModel;
                     //routeLVM.
@@ -321,5 +340,75 @@ namespace WeekendPlan.Controllers
             return View();
         }
 
+        public ActionResult SelectOpportunity()
+
+        {
+            OpportunityListViewModel tempOpportunityLVM = new OpportunityListViewModel();
+            tempOpportunityLVM.Opportunities = new List<OpportunityViewModel>();
+
+            OpportunityListViewModel opportunityLVM = new OpportunityListViewModel();
+            opportunityLVM.Opportunities = new List<OpportunityViewModel>();
+            RouteListViewModel routeLVM = new RouteListViewModel();
+
+            if (Session["user_opportunities_all"] != null)
+            {
+                if (Session["user_routes"] != null)
+                {
+                    routeLVM = Session["user_routes"] as RouteListViewModel;
+
+                    int date_start_hour = 0;
+                    //int i =0;
+                    tempOpportunityLVM = Session["user_opportunities_all"] as OpportunityListViewModel;
+
+                    foreach (var oppor in routeLVM.Routes)
+                    {
+                        foreach (var o in tempOpportunityLVM.Opportunities)
+                        {
+                            var op = oppor.Opportunities.Find(x => x.OpportunityId == o.OpportunityId);
+                            if (op == null)
+                            {
+                                opportunityLVM.Opportunities.Add(o);
+                            }
+                        }
+                    }
+                }
+                //Session["user_opportunities_all"] = opportunityLVM;
+            }
+
+            return View("SelectOpportunity", opportunityLVM);
+
+        }
+
+        public ActionResult AddOpportunity(int id)
+        {
+            OpportunityListViewModel opportunityLVM = new OpportunityListViewModel();
+            opportunityLVM.Opportunities = new List<OpportunityViewModel>();
+            RouteListViewModel routeLVM = new RouteListViewModel();
+            RouteListViewModel newRouteLVM = new RouteListViewModel();
+            //Opportunity opportunity = new Opportunity();
+
+            if (Session["user_routes"] != null)
+            {
+                routeLVM = Session["user_routes"] as RouteListViewModel;
+
+                int date_start_hour = 0;
+                opportunityLVM = Session["user_opportunities_all"] as OpportunityListViewModel;
+                var opportunities = Session["user_opportunities_all_by_user"] as List<Opportunity>;
+                var o = opportunities.Find(x => x.OpportunityId == id);
+
+                newRouteLVM = routeLVM;
+
+                //foreach (var oppor in routeLVM.Routes)
+                //{
+                //    oppor.Opportunities.Add(o);
+                //    newRouteLVM.Routes.Add(oppor);
+                //    break;
+                //}
+                routeLVM.Routes[0].Opportunities.Add(o); 
+                Session["user_routes"] = routeLVM;
+            }
+
+            return RedirectToAction("Opportunities", "Opportunity");
+        }
     }
 }

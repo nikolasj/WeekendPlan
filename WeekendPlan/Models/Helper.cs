@@ -32,6 +32,7 @@ namespace WeekendPlan.Models
         public static String ConvertDateStartHourToInt(String dateStart)
         {
             String[] dateVals = dateStart.Split(' ', ':');
+
             return dateVals[1];
         }
 

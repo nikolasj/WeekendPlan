@@ -197,6 +197,7 @@
     <Compile Include="Models\Place.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\Route.cs" />
+    <Compile Include="Models\RouteOpportunity.cs" />
     <Compile Include="Models\Show.cs" />
     <Compile Include="Models\SocialConnection.cs" />
     <Compile Include="Models\Tag.cs" />
@@ -322,6 +323,7 @@
     <Content Include="Views\Administration\AdministrationComments.cshtml" />
     <Content Include="Views\Administration\AdministrationOpportunity.cshtml" />
     <Content Include="Views\Administration\AdministrationOpportunityUpdate.cshtml" />
+    <Content Include="Views\Opportunity\SelectOpportunity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
